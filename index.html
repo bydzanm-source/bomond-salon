@@ -350,7 +350,15 @@
   .team-body{padding:1.1rem 1.1rem 1.4rem;display:flex;flex-direction:column;gap:0.5rem;flex:1;}
   .team-body h3{font-size:1.35rem;}
   .team-body p{font-size:0.86rem;color:var(--ink-soft);flex:1;}
-  .team-body .btn{margin-top:0.6rem;align-self:flex-start;}
+  .card-actions{display:flex;align-items:center;gap:0.6rem;margin-top:0.6rem;}
+  .card-call-btn{
+    width:2.6rem;height:2.6rem;flex:none;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--line-strong);color:var(--accent);
+    transition:background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .card-call-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateY(-2px);}
+  .card-call-btn .icon{width:1.05em;height:1.05em;}
   .boss-badge{
     display:inline-block;font-size:0.65rem;font-weight:800;letter-spacing:0.08em;
     background:var(--accent);color:#fff;padding:0.2em 0.6em;border-radius:100px;margin-left:0.4em;
@@ -538,7 +546,7 @@
     </nav>
     <div class="nav-actions">
       <a class="phone-link" href="tel:+79067181768">+7 906 718-17-68</a>
-      <a class="btn btn-primary btn-pill btn-sm" href="https://t.me/bomondblh" target="_blank" rel="noopener">Записаться</a>
+      <a class="btn btn-primary btn-pill btn-sm" href="https://t.me/Bomond_Hostess_bot?start=site" target="_blank" rel="noopener">Записаться</a>
       <button class="burger" id="burgerBtn" aria-label="Открыть меню" aria-expanded="false">
         <svg class="icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
       </button>
@@ -563,7 +571,7 @@
     <a href="#contacts">Контакты</a>
   </nav>
   <div class="contacts">
-    <a class="btn btn-primary btn-pill" href="https://t.me/bomondblh" target="_blank" rel="noopener">Записаться в Telegram</a>
+    <a class="btn btn-primary btn-pill" href="https://t.me/Bomond_Hostess_bot?start=site" target="_blank" rel="noopener">Записаться в Telegram</a>
     <a class="btn btn-ghost btn-pill" href="tel:+79067181768">Позвонить +7 906 718-17-68</a>
   </div>
 </div>
@@ -585,12 +593,12 @@
           </div>
         </div>
         <div class="cta-row">
-          <a class="btn btn-primary btn-pill" href="https://t.me/bomondblh" target="_blank" rel="noopener">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 4L3 11.5l6 2.2M21 4l-3.2 16-8.8-6.3M21 4L9.2 13.9"/></svg>
+          <a class="btn btn-primary btn-pill" href="https://t.me/Bomond_Hostess_bot?start=site" target="_blank" rel="noopener">
+            <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M23.9 3.8 20.3 20.8c-.3 1.2-1 1.5-2 .9l-5.5-4-2.7 2.6c-.3.3-.5.5-1.1.5l.4-5.6L19.4 5c.4-.4-.1-.6-.7-.2L8.3 14 2.9 12.3c-1.2-.4-1.2-1.2.3-1.8L22.4 2.2c1-.4 1.8.2 1.5 1.6z"/></svg>
             Записаться в Telegram
           </a>
           <a class="btn btn-ghost btn-pill" href="tel:+79067181768">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2 2C9.5 21 3 14.5 3 6a2 2 0 0 1 2-2z"/></svg>
+            <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .5 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg>
             Позвонить
           </a>
         </div>
@@ -724,7 +732,10 @@
             <span class="team-role">Основатель <span class="boss-badge">BOSS</span><br>Главный колорист</span>
             <h3>Татьяна Буева</h3>
             <p>Автор идеи Bomond и главный колорист студии. Сложное окрашивание и коррекция цвета — с ювелирным вниманием к деталям и волосам, которые видели всё.</p>
-            <a class="btn btn-primary btn-sm btn-pill" href="https://t.me/bomondblh" target="_blank" rel="noopener">Записаться</a>
+            <div class="card-actions">
+              <a class="btn btn-primary btn-sm btn-pill" href="https://t.me/Bomond_Hostess_bot?start=site" target="_blank" rel="noopener">Записаться</a>
+              <a class="card-call-btn" href="tel:+79067181768" aria-label="Позвонить" title="Позвонить"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .5 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg></a>
+            </div>
           </div>
         </article>
 
@@ -734,7 +745,10 @@
             <span class="team-role">Администратор</span>
             <h3>Варвара Лунина</h3>
             <p>Первое лицо студии: подберёт мастера и время, ответит на любой вопрос до визита и встретит с теплом — с Варварой запись превращается в приятную часть заботы о себе.</p>
-            <a class="btn btn-ghost btn-sm btn-pill" href="https://t.me/bomondblh" target="_blank" rel="noopener">Написать администратору</a>
+            <div class="card-actions">
+              <a class="btn btn-ghost btn-sm btn-pill" href="https://t.me/Bomond_Hostess_bot?start=site" target="_blank" rel="noopener">Написать администратору</a>
+              <a class="card-call-btn" href="tel:+79067181768" aria-label="Позвонить" title="Позвонить"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .5 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg></a>
+            </div>
           </div>
         </article>
 
@@ -744,7 +758,10 @@
             <span class="team-role">Колорист · лешмейкер</span>
             <h3>Алёна Сухарева</h3>
             <p>Растит крылья вашим ресницам и находит идеальный оттенок для волос. Тёплый нюд и деликатные переходы цвета — её почерк.</p>
-            <a class="btn btn-ghost btn-sm btn-pill" href="https://t.me/bomondblh" target="_blank" rel="noopener">Записаться</a>
+            <div class="card-actions">
+              <a class="btn btn-ghost btn-sm btn-pill" href="https://t.me/Bomond_Hostess_bot?start=site" target="_blank" rel="noopener">Записаться</a>
+              <a class="card-call-btn" href="tel:+79067181768" aria-label="Позвонить" title="Позвонить"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .5 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg></a>
+            </div>
           </div>
         </article>
 
@@ -754,7 +771,10 @@
             <span class="team-role">Колорист · бровист</span>
             <h3>Лина Овчарова</h3>
             <p>Мастер по бровям и колорист в одном лице: превращает взгляд в акцент, а волосы — в результат точной техники и вкуса.</p>
-            <a class="btn btn-ghost btn-sm btn-pill" href="https://t.me/bomondblh" target="_blank" rel="noopener">Записаться</a>
+            <div class="card-actions">
+              <a class="btn btn-ghost btn-sm btn-pill" href="https://t.me/Bomond_Hostess_bot?start=site" target="_blank" rel="noopener">Записаться</a>
+              <a class="card-call-btn" href="tel:+79067181768" aria-label="Позвонить" title="Позвонить"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .5 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg></a>
+            </div>
           </div>
         </article>
 
@@ -764,7 +784,10 @@
             <span class="team-role">Стилист-парикмахер</span>
             <h3>Полина Андреева</h3>
             <p>Виртуоз стрижки и восстановления волос: ботокс, холодное восстановление, окрашивание — результат, который хочется трогать.</p>
-            <a class="btn btn-ghost btn-sm btn-pill" href="https://t.me/bomondblh" target="_blank" rel="noopener">Записаться</a>
+            <div class="card-actions">
+              <a class="btn btn-ghost btn-sm btn-pill" href="https://t.me/Bomond_Hostess_bot?start=site" target="_blank" rel="noopener">Записаться</a>
+              <a class="card-call-btn" href="tel:+79067181768" aria-label="Позвонить" title="Позвонить"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .5 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg></a>
+            </div>
           </div>
         </article>
 
@@ -862,7 +885,7 @@
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 8v5M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg>
         <div>Стоимость зависит от длины и структуры волос. Актуальный полный прайс уточняйте у администратора — напишите нам в
           <a href="https://wa.me/79067181768" target="_blank" rel="noopener" style="color:var(--accent);font-weight:700;">WhatsApp</a> или
-          <a href="https://t.me/bomondblh" target="_blank" rel="noopener" style="color:var(--accent);font-weight:700;">Telegram</a>.</div>
+          <a href="https://t.me/Bomond_Hostess_bot?start=site" target="_blank" rel="noopener" style="color:var(--accent);font-weight:700;">Telegram</a>.</div>
       </div>
     </div>
   </section>
@@ -928,7 +951,7 @@
               </span>
             </div>
             <a class="contact-card" href="tel:+79067181768">
-              <span class="icon-wrap"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2 2C9.5 21 3 14.5 3 6a2 2 0 0 1 2-2z"/></svg></span>
+              <span class="icon-wrap"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .5 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg></span>
               <span>
                 <h4>+7 906 718-17-68</h4>
                 <p>Звонок, WhatsApp или Telegram — как удобно</p>
@@ -937,13 +960,13 @@
           </div>
           <div class="quick-contacts">
             <a class="circle-btn call" href="tel:+79067181768" aria-label="Позвонить">
-              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2 2C9.5 21 3 14.5 3 6a2 2 0 0 1 2-2z"/></svg>
+              <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .5 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg>
             </a>
             <a class="circle-btn wa" href="https://wa.me/79067181768" target="_blank" rel="noopener" aria-label="Написать в WhatsApp">
               <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20l1.3-4A8 8 0 1 1 8 19l-4 1z"/><path d="M9 10c0 3 2 5 5 5"/></svg>
             </a>
-            <a class="circle-btn tg" href="https://t.me/bomondblh" target="_blank" rel="noopener" aria-label="Написать в Telegram">
-              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 4L3 11.5l6 2.2M21 4l-3.2 16-8.8-6.3M21 4L9.2 13.9"/></svg>
+            <a class="circle-btn tg" href="https://t.me/Bomond_Hostess_bot?start=site" target="_blank" rel="noopener" aria-label="Написать в Telegram">
+              <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M23.9 3.8 20.3 20.8c-.3 1.2-1 1.5-2 .9l-5.5-4-2.7 2.6c-.3.3-.5.5-1.1.5l.4-5.6L19.4 5c.4-.4-.1-.6-.7-.2L8.3 14 2.9 12.3c-1.2-.4-1.2-1.2.3-1.8L22.4 2.2c1-.4 1.8.2 1.5 1.6z"/></svg>
             </a>
           </div>
         </div>
@@ -994,9 +1017,9 @@
 
 <div class="fab-wrap">
   <div class="fab-menu" id="fabMenu">
-    <a class="circle-btn call" href="tel:+79067181768" aria-label="Позвонить"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2 2C9.5 21 3 14.5 3 6a2 2 0 0 1 2-2z"/></svg></a>
+    <a class="circle-btn call" href="tel:+79067181768" aria-label="Позвонить"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .5 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg></a>
     <a class="circle-btn wa" href="https://wa.me/79067181768" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20l1.3-4A8 8 0 1 1 8 19l-4 1z"/><path d="M9 10c0 3 2 5 5 5"/></svg></a>
-    <a class="circle-btn tg" href="https://t.me/bomondblh" target="_blank" rel="noopener" aria-label="Telegram"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 4L3 11.5l6 2.2M21 4l-3.2 16-8.8-6.3M21 4L9.2 13.9"/></svg></a>
+    <a class="circle-btn tg" href="https://t.me/Bomond_Hostess_bot?start=site" target="_blank" rel="noopener" aria-label="Telegram"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M23.9 3.8 20.3 20.8c-.3 1.2-1 1.5-2 .9l-5.5-4-2.7 2.6c-.3.3-.5.5-1.1.5l.4-5.6L19.4 5c.4-.4-.1-.6-.7-.2L8.3 14 2.9 12.3c-1.2-.4-1.2-1.2.3-1.8L22.4 2.2c1-.4 1.8.2 1.5 1.6z"/></svg></a>
   </div>
   <button class="fab-main" id="fabMain" aria-label="Быстрая связь" aria-expanded="false">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
