@@ -1064,11 +1064,11 @@
             <a class="circle-btn tg" href="https://t.me/Bomond_Hostess_bot?start=site" target="_blank" rel="noopener" aria-label="Написать в Telegram">
               <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M23.9 3.8 20.3 20.8c-.3 1.2-1 1.5-2 .9l-5.5-4-2.7 2.6c-.3.3-.5.5-1.1.5l.4-5.6L19.4 5c.4-.4-.1-.6-.7-.2L8.3 14 2.9 12.3c-1.2-.4-1.2-1.2.3-1.8L22.4 2.2c1-.4 1.8.2 1.5 1.6z"/></svg>
             </a>
-            <a class="circle-btn dikidi" href="https://dikidi.app/500351" target="_blank" rel="noopener" aria-label="Записаться онлайн на Dikidi">
+            <a class="circle-btn dikidi" href="https://dikidi.net/#widget=216907" target="_blank" rel="noopener" aria-label="Записаться онлайн на Dikidi">
               <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V3a1 1 0 0 0-2 0v1H8V3a1 1 0 0 0-2 0v1H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM5 20V9h14v11H5zm3.5-6.3 1.5 1.5 4-4L15.4 12l-5.4 5.4-2.9-2.9z"/></svg>
             </a>
           </div>
-          <p class="quick-contacts-note">Онлайн-запись на реальное свободное время — на <a href="https://dikidi.app/500351" target="_blank" rel="noopener">Dikidi</a></p>
+          <p class="quick-contacts-note">Онлайн-запись на реальное свободное время — на <a href="https://dikidi.net/#widget=216907" target="_blank" rel="noopener">Dikidi</a></p>
         </div>
         <div class="map-card" data-reveal>
           <svg class="pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 21s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
@@ -1123,7 +1123,7 @@
     <p class="eyebrow">Bomond</p>
     <h3 id="bookingTitle" class="h3">Как вам удобнее записаться?</h3>
     <div class="booking-options">
-      <a class="booking-option featured" href="https://dikidi.app/500351" target="_blank" rel="noopener">
+      <a class="booking-option featured" id="dikidiWidgetOption" href="https://dikidi.net/#widget=216907" target="_blank" rel="noopener">
         <span class="booking-icon"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V3a1 1 0 0 0-2 0v1H8V3a1 1 0 0 0-2 0v1H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM5 20V9h14v11H5zm3.5-6.3 1.5 1.5 4-4L15.4 12l-5.4 5.4-2.9-2.9z"/></svg></span>
         <span class="booking-text">
           <b>Онлайн на Dikidi</b>
@@ -1229,6 +1229,8 @@
   });
   bookingClose.addEventListener('click', closeBooking);
   bookingOverlay.addEventListener('click', function(e){ if(e.target === bookingOverlay) closeBooking(); });
+  var dikidiWidgetOption = document.getElementById('dikidiWidgetOption');
+  if(dikidiWidgetOption){ dikidiWidgetOption.addEventListener('click', closeBooking); }
 
   // review modal
   var REVIEW_API = 'https://bomond-booking-bot.onrender.com/api/review';
@@ -1404,3 +1406,6 @@
   }, {passive:true});
 })();
 </script>
+
+<!-- Dikidi online booking widget — official embed, real-time synced with the salon's live calendar -->
+<script type="text/javascript" src="https://dikidi.app/assets/js/widget_record/widget2.min.js?v=1773811740"></script>
