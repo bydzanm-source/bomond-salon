@@ -395,23 +395,57 @@
   @media (max-width:560px){.promo-grid{grid-template-columns:1fr;}}
 
   /* ---------- price ---------- */
-  .price-groups{display:flex;flex-direction:column;gap:2.2rem;}
-  .price-group h3{font-size:1.15rem;color:var(--accent);margin-bottom:0.9rem;font-family:'Manrope',sans-serif;font-weight:800;letter-spacing:0.01em;}
-  .price-row{
-    display:flex;justify-content:space-between;gap:1rem;
-    padding-block:0.75rem;border-bottom:1px solid var(--line);
-    font-size:0.96rem;
+  .price-zones{display:flex;flex-wrap:wrap;gap:0.6rem;margin-bottom:2.4rem;}
+  .price-zone-tab{
+    display:flex;align-items:center;gap:0.55rem;
+    padding:0.65rem 1.15rem 0.65rem 0.85rem;border-radius:999px;
+    border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);
+    font-family:'Manrope',sans-serif;font-size:0.86rem;font-weight:700;letter-spacing:0.01em;
+    cursor:pointer;transition:border-color .2s ease, background .2s ease, color .2s ease, transform .2s ease;
   }
-  .price-row .pname{color:var(--ink);}
-  .price-row .pval{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;white-space:nowrap;color:var(--ink-soft);
+  .price-zone-tab:hover{border-color:var(--accent-2);color:var(--ink);transform:translateY(-1px);}
+  .price-zone-tab.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .pz-icon{width:1.15rem;height:1.15rem;flex:none;color:var(--gold);}
+  .price-zone-tab.active .pz-icon{color:#fff;}
+  .price-panel{display:none;}
+  .price-panel.active{display:block;animation:pzFade .4s ease;}
+  @keyframes pzFade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+  @media (prefers-reduced-motion:reduce){.price-panel.active{animation:none;}}
+  .price-panel-head{margin-bottom:1.1rem;}
+  .price-panel-head h3{font-size:1.4rem;color:var(--accent);}
+  .price-panel-head p{color:var(--ink-soft);font-size:0.92rem;margin-top:0.3rem;max-width:56ch;}
+  .price-panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 2.5rem;}
+  @media (max-width:760px){.price-panel-grid{grid-template-columns:1fr;}}
+  .price-item{padding-block:1rem;border-bottom:1px solid var(--line);}
+  .price-item-head{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;}
+  .price-item-head h4{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--ink);}
+  .price-item .pval{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;white-space:nowrap;color:var(--gold);
     font-variant-numeric:tabular-nums;}
+  .price-item p{margin-top:0.3rem;font-size:0.84rem;color:var(--ink-soft);line-height:1.4;}
   .price-note{
     margin-top:2rem;padding:1.3rem 1.4rem;background:var(--surface);border:1px dashed var(--line-strong);
     border-radius:4px;font-size:0.9rem;color:var(--ink-soft);display:flex;gap:0.9rem;align-items:flex-start;
   }
   .price-note .icon{color:var(--accent);margin-top:0.15rem;}
-  .price-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 3rem;}
-  @media (max-width:760px){.price-cols{grid-template-columns:1fr;}}
+
+  /* ---------- floating booking button ---------- */
+  .book-fab{
+    position:fixed;left:1.3rem;bottom:1.3rem;z-index:70;
+    width:86px;height:86px;border-radius:50%;border:0;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    background:radial-gradient(circle at 32% 26%, var(--accent-2), var(--accent) 72%);
+    box-shadow:0 16px 32px -12px rgba(0,0,0,0.5);
+    opacity:0;transform:translateY(12px) scale(0.92);pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .book-fab.visible{opacity:1;transform:none;pointer-events:auto;}
+  .book-fab-ring{position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--gold);animation:bookPulse 2.6s ease-out infinite;}
+  .book-fab-ring.d2{animation-delay:1.3s;}
+  @keyframes bookPulse{0%{transform:scale(1);opacity:0.7;}100%{transform:scale(1.55);opacity:0;}}
+  @media (prefers-reduced-motion:reduce){.book-fab-ring{animation:none;opacity:0.35;}}
+  .book-fab-text{position:relative;color:#fff;font-family:'Manrope',sans-serif;font-weight:800;font-size:0.78rem;
+    letter-spacing:0.02em;line-height:1.3;}
+  @media (max-width:640px){.book-fab{width:74px;height:74px;left:1rem;bottom:1rem;}.book-fab-text{font-size:0.68rem;}}
 
   /* ---------- reviews ---------- */
   .reviews-top{display:flex;flex-wrap:wrap;gap:2.5rem;align-items:flex-end;justify-content:space-between;margin-bottom:2.4rem;}
@@ -974,48 +1008,221 @@
       <div class="section-head" data-reveal>
         <p class="eyebrow">Прайс</p>
         <h2 class="h2">Честная цена<br>за безупречный результат</h2>
-        <p class="lede">Ориентировочная стоимость популярных процедур — финальный расчёт мастер согласует на консультации.</p>
+        <p class="lede">Выберите зону процедур — ниже цены и краткое описание каждой услуги. Точную стоимость мастер согласует на консультации.</p>
       </div>
-      <div class="price-cols" data-reveal>
-        <div class="price-groups">
-          <div class="price-group">
-            <h3>Стрижки</h3>
-            <div class="price-row"><span class="pname">Женская стрижка</span><span class="pval">от 1300 ₽</span></div>
-            <div class="price-row"><span class="pname">Мужская стрижка</span><span class="pval">от 1000 ₽</span></div>
-            <div class="price-row"><span class="pname">Чёлка / окантовка</span><span class="pval">от 500 ₽</span></div>
+
+      <div class="price-zones" data-reveal role="tablist" aria-label="Зоны процедур">
+        <button type="button" class="price-zone-tab active" data-zone="hair" role="tab" aria-selected="true">
+          <svg class="icon pz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><line x1="8.2" y1="7.6" x2="20" y2="20"/><line x1="8.2" y1="16.4" x2="20" y2="4"/></svg>
+          Парикмахерский зал
+        </button>
+        <button type="button" class="price-zone-tab" data-zone="brows" role="tab" aria-selected="false">
+          <svg class="icon pz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 15c2-6 6-9 10-9s6 3 6 6"/></svg>
+          Зона бровей
+        </button>
+        <button type="button" class="price-zone-tab" data-zone="pm" role="tab" aria-selected="false">
+          <svg class="icon pz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10c2-2 5-3 8-3s6 1 8 3c-2 3-5 6-8 6s-6-3-8-6z"/><path d="M4 10c2 1 5 1.5 8 1.5S18 11 20 10"/></svg>
+          Перманентный макияж
+        </button>
+        <button type="button" class="price-zone-tab" data-zone="lash" role="tab" aria-selected="false">
+          <svg class="icon pz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 12c2.8-4 6.6-6 10-6s7.2 2 10 6c-2.8 4-6.6 6-10 6s-7.2-2-10-6z"/><circle cx="12" cy="12" r="2.2"/><line x1="6" y1="6.5" x2="7.3" y2="8"/><line x1="12" y1="5.3" x2="12" y2="7"/><line x1="18" y1="6.5" x2="16.7" y2="8"/></svg>
+          Наращивание ресниц
+        </button>
+        <button type="button" class="price-zone-tab" data-zone="care" role="tab" aria-selected="false">
+          <svg class="icon pz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c4 5 7 8.5 7 12a7 7 0 0 1-14 0c0-3.5 3-7 7-12z"/></svg>
+          Уход для волос
+        </button>
+        <button type="button" class="price-zone-tab" data-zone="braid" role="tab" aria-selected="false">
+          <svg class="icon pz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3c3 2-3 4 0 6s-3 4 0 6-3 4 0 6"/><path d="M16 3c-3 2 3 4 0 6s3 4 0 6 3 4 0 6"/></svg>
+          Плетение
+        </button>
+        <button type="button" class="price-zone-tab" data-zone="makeup" role="tab" aria-selected="false">
+          <svg class="icon pz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6l1 5H8l1-5z"/><path d="M8 8h8l-1 4H9L8 8z"/><path d="M9 12h6l-.7 8a1.8 1.8 0 0 1-1.8 1.6h-1a1.8 1.8 0 0 1-1.8-1.6L9 12z"/></svg>
+          Макияж
+        </button>
+      </div>
+
+      <div class="price-panels" data-reveal>
+        <div class="price-panel active" id="pz-hair" role="tabpanel">
+          <div class="price-panel-head">
+            <h3 class="h3">Парикмахерский зал</h3>
+            <p>Стрижки, укладки и окрашивание — от аккуратной коррекции формы до сложного цвета.</p>
           </div>
-          <div class="price-group">
-            <h3>Окрашивание</h3>
-            <div class="price-row"><span class="pname">Тонирование</span><span class="pval">от 2500 ₽</span></div>
-            <div class="price-row"><span class="pname">Окрашивание корней</span><span class="pval">от 2000 ₽</span></div>
-            <div class="price-row"><span class="pname">Сложное окрашивание, шатуш / балаяж</span><span class="pval">от 4500 ₽</span></div>
-          </div>
-          <div class="price-group">
-            <h3>Брови и ресницы</h3>
-            <div class="price-row"><span class="pname">Коррекция и окрашивание бровей</span><span class="pval">от 900 ₽</span></div>
-            <div class="price-row"><span class="pname">Ламинирование ресниц</span><span class="pval">от 1800 ₽</span></div>
-            <div class="price-row"><span class="pname">Наращивание ресниц</span><span class="pval">от 1800 ₽</span></div>
+          <div class="price-panel-grid">
+            <div class="price-item">
+              <div class="price-item-head"><h4>Женская стрижка</h4><span class="pval">от 1300 ₽</span></div>
+              <p>С учётом формы лица и структуры волос, укладка в подарок.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Мужская стрижка</h4><span class="pval">от 1000 ₽</span></div>
+              <p>Чёткие линии и аккуратные контуры — быстро и по делу.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Чёлка / окантовка</h4><span class="pval">от 500 ₽</span></div>
+              <p>Обновить форму между визитами к мастеру.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Укладка</h4><span class="pval">от 1200 ₽</span></div>
+              <p>Локоны или гладкость — под повод и настроение.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Тонирование</h4><span class="pval">от 2500 ₽</span></div>
+              <p>Освежить оттенок без агрессивного окрашивания.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Окрашивание корней</h4><span class="pval">от 2000 ₽</span></div>
+              <p>Поддержание чистого цвета между полными окрашиваниями.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Сложное окрашивание, шатуш / балаяж</h4><span class="pval">от 4500 ₽</span></div>
+              <p>Плавные переходы цвета — работа на несколько часов и годы комплиментов.</p>
+            </div>
           </div>
         </div>
-        <div class="price-groups">
-          <div class="price-group">
-            <h3>Уход за волосами</h3>
-            <div class="price-row"><span class="pname">Ботокс для волос</span><span class="pval">от 2500 ₽</span></div>
-            <div class="price-row"><span class="pname">Кератиновое выпрямление</span><span class="pval">от 4000 ₽</span></div>
-            <div class="price-row"><span class="pname">Криореконструкция</span><span class="pval">от 1500 ₽</span></div>
+
+        <div class="price-panel" id="pz-brows" role="tabpanel" hidden>
+          <div class="price-panel-head">
+            <h3 class="h3">Зона бровей</h3>
+            <p>Форма, цвет и укладка волосков — с подбором под черты лица.</p>
           </div>
-          <div class="price-group">
-            <h3>Плетение</h3>
-            <div class="price-row"><span class="pname">Косы</span><span class="pval">от 1500 ₽</span></div>
-            <div class="price-row"><span class="pname">Брейды</span><span class="pval">от 3000 ₽</span></div>
+          <div class="price-panel-grid">
+            <div class="price-item">
+              <div class="price-item-head"><h4>Коррекция формы</h4><span class="pval">от 700 ₽</span></div>
+              <p>Подберём форму под черты лица.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Окрашивание (краска / хна)</h4><span class="pval">от 900 ₽</span></div>
+              <p>Стойкий цвет и чёткий контур на 3–4 недели.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Ламинирование бровей</h4><span class="pval">от 1500 ₽</span></div>
+              <p>Дисциплинирует непослушные волоски, эффект держится месяц.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Архитектура бровей</h4><span class="pval">от 2200 ₽</span></div>
+              <p>Коррекция + окрашивание + ламинирование — комплекс для тех, кто хочет всё и сразу.</p>
+            </div>
           </div>
-          <div class="price-group">
-            <h3>Перманентный макияж</h3>
-            <div class="price-row"><span class="pname">Брови</span><span class="pval">от 6000 ₽</span></div>
-            <div class="price-row"><span class="pname">Губы</span><span class="pval">от 7000 ₽</span></div>
+        </div>
+
+        <div class="price-panel" id="pz-pm" role="tabpanel" hidden>
+          <div class="price-panel-head">
+            <h3 class="h3">Перманентный макияж</h3>
+            <p>Долговременный результат без ежедневной коррекции.</p>
+          </div>
+          <div class="price-panel-grid">
+            <div class="price-item">
+              <div class="price-item-head"><h4>Брови (пудровое напыление / волосковая техника)</h4><span class="pval">от 6000 ₽</span></div>
+              <p>Естественный результат без ежедневной коррекции.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Межресничка</h4><span class="pval">от 5000 ₽</span></div>
+              <p>Взгляд выразительнее — даже без макияжа.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Губы</h4><span class="pval">от 7000 ₽</span></div>
+              <p>Natural-эффект или чёткий контур — на ваш выбор.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Коррекция через 30 дней</h4><span class="pval">от 1500 ₽</span></div>
+              <p>Закрепляем результат после заживления.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="price-panel" id="pz-lash" role="tabpanel" hidden>
+          <div class="price-panel-head">
+            <h3 class="h3">Наращивание ресниц</h3>
+            <p>От естественного объёма до эффектной драмы на особый случай.</p>
+          </div>
+          <div class="price-panel-grid">
+            <div class="price-item">
+              <div class="price-item-head"><h4>Классика</h4><span class="pval">от 1800 ₽</span></div>
+              <p>Естественный объём, ресничка к ресничке.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>2D / 3D объём</h4><span class="pval">от 2300 ₽</span></div>
+              <p>Более выразительный взгляд без эффекта «паучьих лап».</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Голливудский объём</h4><span class="pval">от 2800 ₽</span></div>
+              <p>Максимальная драма для особого случая.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Снятие наращивания</h4><span class="pval">от 500 ₽</span></div>
+              <p>Бережно, без вреда родным ресницам.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="price-panel" id="pz-care" role="tabpanel" hidden>
+          <div class="price-panel-head">
+            <h3 class="h3">Уход для волос</h3>
+            <p>Восстановление структуры волоса — от экспресс-ухода до глубокого лечения.</p>
+          </div>
+          <div class="price-panel-grid">
+            <div class="price-item">
+              <div class="price-item-head"><h4>Ботокс для волос</h4><span class="pval">от 2500 ₽</span></div>
+              <p>Заполняет волос изнутри, убирает пушистость и сечение.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Кератиновое выпрямление</h4><span class="pval">от 4000 ₽</span></div>
+              <p>Гладкость и блеск на 3–4 месяца, без пушения.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Криореконструкция</h4><span class="pval">от 1500 ₽</span></div>
+              <p>Экспресс-восстановление структуры холодным методом.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Полировка волос</h4><span class="pval">от 1800 ₽</span></div>
+              <p>Срезает секущиеся кончики без потери длины.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="price-panel" id="pz-braid" role="tabpanel" hidden>
+          <div class="price-panel-head">
+            <h3 class="h3">Плетение</h3>
+            <p>От нежной косы до брейдов, которые держатся неделями.</p>
+          </div>
+          <div class="price-panel-grid">
+            <div class="price-item">
+              <div class="price-item-head"><h4>Косы</h4><span class="pval">от 1500 ₽</span></div>
+              <p>От французской косы до сложных плетений на праздник.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Брейды</h4><span class="pval">от 3000 ₽</span></div>
+              <p>Держатся неделями, минимум ухода.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Плетение с канекалоном</h4><span class="pval">от 3500 ₽</span></div>
+              <p>Дополнительный объём и цвет в причёске.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="price-panel" id="pz-makeup" role="tabpanel" hidden>
+          <div class="price-panel-head">
+            <h3 class="h3">Макияж</h3>
+            <p>Дневной, вечерний или свадебный образ — под ваш повод.</p>
+          </div>
+          <div class="price-panel-grid">
+            <div class="price-item">
+              <div class="price-item-head"><h4>Дневной макияж</h4><span class="pval">от 1500 ₽</span></div>
+              <p>Лёгкий, естественный — для будней и деловых встреч.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Вечерний макияж</h4><span class="pval">от 2500 ₽</span></div>
+              <p>Выразительный образ для важного события.</p>
+            </div>
+            <div class="price-item">
+              <div class="price-item-head"><h4>Свадебный макияж</h4><span class="pval">от 4000 ₽</span></div>
+              <p>Стойкий образ, который продержится весь день.</p>
+            </div>
           </div>
         </div>
       </div>
+
       <div class="price-note" data-reveal>
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 8v5M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg>
         <div>Стоимость зависит от длины и структуры волос, а также от квалификации мастера. Актуальный полный прайс уточняйте у администратора — напишите нам в
@@ -1243,6 +1450,12 @@
   </div>
 </div>
 
+<button type="button" class="book-fab" id="bookFab" data-open-booking aria-label="Открыть окно онлайн-записи">
+  <span class="book-fab-ring" aria-hidden="true"></span>
+  <span class="book-fab-ring d2" aria-hidden="true"></span>
+  <span class="book-fab-text">Онлайн<br>запись</span>
+</button>
+
 <div class="fab-wrap">
   <div class="fab-menu" id="fabMenu">
     <a class="circle-btn call" href="tel:+79067181768" aria-label="Позвонить"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .5 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg></a>
@@ -1447,10 +1660,30 @@
   // header shrink + reveal floating contact button past the hero
   var header = document.querySelector('header.site');
   var fabWrap = document.querySelector('.fab-wrap');
+  var bookFab = document.getElementById('bookFab');
   window.addEventListener('scroll', function(){
     header.style.boxShadow = window.scrollY > 30 ? 'var(--shadow)' : 'none';
-    fabWrap.classList.toggle('visible', window.scrollY > window.innerHeight * 0.6);
+    var pastHero = window.scrollY > window.innerHeight * 0.6;
+    fabWrap.classList.toggle('visible', pastHero);
+    if(bookFab) bookFab.classList.toggle('visible', pastHero);
   }, {passive:true});
+
+  // price: zone tabs
+  var priceZoneTabs = document.querySelectorAll('.price-zone-tab');
+  var priceZoneIds = {hair:'pz-hair', brows:'pz-brows', pm:'pz-pm', lash:'pz-lash', care:'pz-care', braid:'pz-braid', makeup:'pz-makeup'};
+  priceZoneTabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      priceZoneTabs.forEach(function(t){ t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+      tab.classList.add('active'); tab.setAttribute('aria-selected','true');
+      Object.keys(priceZoneIds).forEach(function(key){
+        var panel = document.getElementById(priceZoneIds[key]);
+        if(!panel) return;
+        var show = key === tab.dataset.zone;
+        panel.classList.toggle('active', show);
+        panel.hidden = !show;
+      });
+    });
+  });
 })();
 </script>
 
