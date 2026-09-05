@@ -1551,6 +1551,14 @@
   if (window.Telegram && window.Telegram.WebApp) {
     window.Telegram.WebApp.ready();
     window.Telegram.WebApp.expand();
+    // Inside the Mini App's own WebView, plain <a href="https://t.me/..."> links
+    // don't reliably switch to the chat — Telegram's API method is required.
+    document.addEventListener('click', function(e){
+      var a = e.target.closest('a[href^="https://t.me/"]');
+      if (!a) return;
+      e.preventDefault();
+      window.Telegram.WebApp.openTelegramLink(a.getAttribute('href'));
+    });
   }
 </script>
 
