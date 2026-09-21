@@ -30,6 +30,7 @@
     --twogis:#279e3d;
     --promo-bg:#4a2440;
     --promo-gold:#d9ab5c;
+    --surface-rgb:251,247,239;--surface2-rgb:244,236,223;--bgsoft-rgb:227,214,195;--accent-rgb:91,42,76;--accent2-rgb:139,95,160;--gold-rgb:169,129,63;
     color-scheme:light;
   }
   @media (prefers-color-scheme: dark){
@@ -47,6 +48,7 @@
       --line:rgba(243,234,224,0.14);
       --line-strong:rgba(243,234,224,0.26);
       --shadow:0 20px 50px -25px rgba(0,0,0,0.6);
+      --surface-rgb:35,26,29;--surface2-rgb:43,32,35;--bgsoft-rgb:31,21,24;--accent-rgb:211,164,220;--accent2-rgb:169,127,190;--gold-rgb:220,181,114;
       color-scheme:dark;
     }
   }
@@ -64,6 +66,7 @@
     --line:rgba(243,234,224,0.14);
     --line-strong:rgba(243,234,224,0.26);
     --shadow:0 20px 50px -25px rgba(0,0,0,0.6);
+    --surface-rgb:35,26,29;--surface2-rgb:43,32,35;--bgsoft-rgb:31,21,24;--accent-rgb:211,164,220;--accent2-rgb:169,127,190;--gold-rgb:220,181,114;
     color-scheme:dark;
   }
 
@@ -183,8 +186,8 @@
   /* ---------- header ---------- */
   header.site{
     position:sticky;top:0;z-index:60;
-    background:color-mix(in srgb, var(--surface) 92%, transparent);
-    backdrop-filter:blur(10px);
+    background:rgba(var(--surface-rgb),0.92);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line);
   }
   .nav-row{
@@ -254,8 +257,8 @@
   .hero-portrait img{width:100%;height:100%;object-fit:cover;}
   .hero-portrait .tag{
     position:absolute;left:1.2rem;bottom:1.2rem;
-    background:color-mix(in srgb, var(--surface) 88%, transparent);
-    backdrop-filter:blur(6px);
+    background:rgba(var(--surface-rgb),0.88);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
     padding:0.55rem 0.9rem;border-radius:2px;
     font-size:0.78rem;font-weight:700;color:var(--ink);
   }
@@ -277,7 +280,7 @@
   .hotspot .name-chip{
     opacity:0;transform:translateY(10px);
     transition:opacity .25s ease, transform .25s ease, background .25s ease;
-    background:color-mix(in srgb, var(--accent) 92%, transparent);
+    background:rgba(var(--accent-rgb),0.92);
     color:#fff;
     font-family:'Cormorant Garamond',serif;
     font-size:clamp(0.95rem,1.4vw,1.35rem);
@@ -289,14 +292,14 @@
   }
   .hotspot::before{
     content:"";position:absolute;inset:0;
-    background:linear-gradient(to top, color-mix(in srgb, var(--accent) 55%, transparent), transparent 55%);
+    background:linear-gradient(to top, rgba(var(--accent-rgb),0.55), transparent 55%);
     opacity:0;transition:opacity .25s ease;
   }
   .hotspot:hover::before,.hotspot:focus-visible::before{opacity:1;}
   .hotspot:hover .name-chip,.hotspot:focus-visible .name-chip{opacity:1;transform:none;}
   @media (hover:none), (max-width:640px){
     /* touch screens have no hover — show names and the tap zone permanently */
-    .hotspot::before{opacity:1;background:linear-gradient(to top, color-mix(in srgb, var(--accent) 65%, transparent), transparent 65%);}
+    .hotspot::before{opacity:1;background:linear-gradient(to top, rgba(var(--accent-rgb),0.65), transparent 65%);}
     .hotspot .name-chip{opacity:1;transform:none;font-size:clamp(0.56rem,2.3vw,0.95rem);padding:0.4em 0.55em;white-space:normal;max-width:94%;text-align:center;line-height:1.15;}
   }
   .lineup-caption{
@@ -344,7 +347,7 @@
   .service-photo{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;}
   .service-price-badge{
     position:absolute;top:0.8rem;left:0.8rem;z-index:1;
-    background:color-mix(in srgb, var(--accent) 88%, transparent);
+    background:rgba(var(--accent-rgb),0.88);
     color:#fff;font-family:'Cormorant Garamond',serif;font-weight:700;
     font-size:0.95rem;letter-spacing:0.01em;
     padding:0.35em 0.85em;border-radius:100px;
@@ -634,7 +637,7 @@
   .quick-contacts-note a:hover{text-decoration:underline;}
   .map-card{
     border-radius:4px;overflow:hidden;border:1px solid var(--line);background:
-      radial-gradient(circle at 30% 20%, color-mix(in srgb, var(--accent-2) 30%, transparent), transparent 55%),
+      radial-gradient(circle at 30% 20%, rgba(var(--accent2-rgb),0.3), transparent 55%),
       var(--surface-2);
     position:relative;min-height:340px;display:flex;flex-direction:column;justify-content:flex-end;padding:1.6rem;
   }
@@ -663,7 +666,7 @@
   /* ---------- booking modal ---------- */
   .booking-overlay{
     position:fixed;inset:0;z-index:110;
-    background:color-mix(in srgb, #100a0c 62%, transparent);
+    background:rgba(16,10,12,0.62);
     display:flex;align-items:center;justify-content:center;
     padding:1.2rem;
     opacity:0;pointer-events:none;
@@ -691,7 +694,7 @@
   /* ---------- in-site booking window (DIKIDI record page in an iframe) ---------- */
   .frame-overlay{
     position:fixed;inset:0;z-index:120;
-    background:color-mix(in srgb, #100a0c 72%, transparent);
+    background:rgba(16,10,12,0.72);
     display:flex;align-items:center;justify-content:center;padding:1rem;
     opacity:0;pointer-events:none;transition:opacity .25s ease;
   }
@@ -760,7 +763,7 @@
     transition:border-color .2s ease, transform .2s ease, box-shadow .2s ease;
   }
   .booking-option:hover{border-color:var(--accent-2);transform:translateX(3px);box-shadow:var(--shadow);}
-  .booking-option.featured{border-color:var(--gold);background:color-mix(in srgb, var(--gold) 12%, transparent);}
+  .booking-option.featured{border-color:var(--gold);background:rgba(var(--gold-rgb),0.12);}
   .booking-icon{
     width:2.5rem;height:2.5rem;flex:none;border-radius:50%;
     display:flex;align-items:center;justify-content:center;
@@ -775,7 +778,7 @@
   /* ---------- review modal ---------- */
   .review-overlay{
     position:fixed;inset:0;z-index:110;
-    background:color-mix(in srgb, #100a0c 62%, transparent);
+    background:rgba(16,10,12,0.62);
     display:flex;align-items:center;justify-content:center;
     padding:1.2rem;
     opacity:0;pointer-events:none;
@@ -879,14 +882,14 @@
   #aurora{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:0;transition:opacity 1.6s ease;}
   #aurora.on{opacity:1;}
   .cursor-glow{position:fixed;left:0;top:0;width:340px;height:340px;border-radius:50%;pointer-events:none;z-index:2;
-    background:radial-gradient(circle, color-mix(in srgb, var(--accent-2) 22%, transparent) 0%, transparent 65%);
+    background:radial-gradient(circle, rgba(var(--accent2-rgb),0.22) 0%, transparent 65%);
     transform:translate(-50%,-50%);opacity:0;transition:opacity .6s ease;mix-blend-mode:multiply;}
   @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .cursor-glow{mix-blend-mode:screen;} }
   :root[data-theme="dark"] .cursor-glow{mix-blend-mode:screen;}
   .cursor-glow.on{opacity:1;}
   /* let the aurora glow through the tinted sections */
-  #services, #masters, #reviews, .lineup{background:color-mix(in srgb, var(--surface-2) 82%, transparent) !important;}
-  .lineup{background:color-mix(in srgb, var(--bg-soft) 80%, transparent) !important;}
+  #services, #masters, #reviews, .lineup{background:rgba(var(--surface2-rgb),0.82) !important;}
+  .lineup{background:rgba(var(--bgsoft-rgb),0.8) !important;}
   .service-card, .team-card, .review-card, .contact-card, .rating-badge, .stat, .about-photo-main, .about-photo-accent{backface-visibility:hidden;}
 
   /* scroll progress */
@@ -915,13 +918,13 @@
     animation:shine 5.5s ease-in-out 1.6s infinite;
   }
   @keyframes shine{0%{background-position:110% 0;}45%{background-position:-10% 0;}100%{background-position:-10% 0;}}
-  .hero-portrait{clip-path:inset(0 0 100% 0 round 4px);animation:portraitReveal 1.3s cubic-bezier(.65,0,.2,1) .35s forwards;}
-  @keyframes portraitReveal{to{clip-path:inset(0 0 0 0 round 4px);}}
+  .hero-portrait{clip-path:inset(0 0 100% 0);animation:portraitReveal 1.3s cubic-bezier(.65,0,.2,1) .35s forwards;}
+  @keyframes portraitReveal{to{clip-path:inset(0 0 0 0);}}
   .hero-portrait img{transform-origin:60% 40%;animation:kenburns 16s ease-in-out infinite alternate;}
   @keyframes kenburns{from{transform:scale(1);}to{transform:scale(1.08);}}
   .hero-portrait .tag{opacity:0;animation:heroUp .8s ease 1.4s forwards;}
   .hero-orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(2px);z-index:0;
-    background:radial-gradient(circle at 35% 35%, color-mix(in srgb, var(--gold) 55%, transparent), color-mix(in srgb, var(--accent-2) 25%, transparent) 60%, transparent 72%);
+    background:radial-gradient(circle at 35% 35%, rgba(var(--gold-rgb),0.55), rgba(var(--accent2-rgb),0.25) 60%, transparent 72%);
     animation:orbFloat 14s ease-in-out infinite;}
   .hero-orb.o1{width:220px;height:220px;right:-40px;top:6%;animation-duration:17s;}
   .hero-orb.o2{width:120px;height:120px;left:42%;bottom:4%;animation-duration:12s;animation-delay:-4s;opacity:.7;}
@@ -953,8 +956,8 @@
   .work-grid > div{transition:transform .4s ease, box-shadow .4s ease;}
   .work-grid > div:hover{transform:translateY(-5px);}
   .service-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-    box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--gold) 0%, transparent);transition:box-shadow .4s ease;}
-  .service-card:hover::after{box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--gold) 70%, transparent);}
+    box-shadow:inset 0 0 0 1px rgba(var(--gold-rgb),0);transition:box-shadow .4s ease;}
+  .service-card:hover::after{box-shadow:inset 0 0 0 1px rgba(var(--gold-rgb),0.7);}
   .tilt{transform-style:preserve-3d;will-change:transform;}
   .btn-primary, .promo-btn{position:relative;overflow:hidden;}
   .btn-primary::after, .promo-btn::after{content:"";position:absolute;top:-40%;bottom:-40%;width:35%;left:-60%;
@@ -971,7 +974,7 @@
     .hero-orb.o1{width:150px;height:150px;right:-30px;top:2%;}
     .hero-orb.o2{display:none;}
     .ticker-track span{font-size:1rem;padding:0.7rem 0.6rem;}
-    .hero-portrait{clip-path:inset(0 0 100% 0 round 4px);}
+    .hero-portrait{clip-path:inset(0 0 100% 0);}
   }
   @media (prefers-reduced-motion:reduce){
     #aurora, .cursor-glow, .hero-orb, .sparkle{display:none !important;}
