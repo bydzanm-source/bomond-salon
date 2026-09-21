@@ -1,0 +1,11 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bomond — диагностика</title>
+<style>body{font:16px/1.5 -apple-system,system-ui,sans-serif;padding:16px;background:#f3ede2;color:#241b1e}pre{white-space:pre-wrap;background:#fff;padding:12px;border-radius:8px;font-size:13px}button{font:inherit;padding:12px 18px;border-radius:100px;border:0;background:#5b2a4c;color:#fff}</style></head>
+<body><h2>Диагностика bomond.site</h2><p>Нажмите кнопку и пришлите скриншот этого экрана.</p><button onclick="run()">Проверить</button><pre id="o">…</pre>
+<script>
+function run(){var o=document.getElementById('o');var r=[];r.push('UA: '+navigator.userAgent);r.push('viewport: '+innerWidth+'x'+innerHeight+' dpr '+devicePixelRatio);
+r.push('Telegram: '+(window.Telegram&&Telegram.WebApp?('yes v'+Telegram.WebApp.version+' '+Telegram.WebApp.platform):'no'));
+r.push('color-mix: '+CSS.supports('color','color-mix(in srgb,red 50%,blue)'));r.push('startViewTransition: '+!!document.startViewTransition);r.push('IntersectionObserver: '+('IntersectionObserver' in window));
+var t0=Date.now();fetch('/?diag='+Date.now(),{cache:'no-store'}).then(function(x){return x.text()}).then(function(t){r.push('index.html: HTTP ok, '+t.length+' chars, '+(Date.now()-t0)+' ms');r.push('has <style>: '+(t.indexOf('<style')>0)+', img refs: '+(t.match(/img\//g)||[]).length);
+var m=t.match(/src="(img\/[^"]+)"/);var im=new Image();var t1=Date.now();im.onload=function(){r.push('photo '+m[1]+': loaded '+im.naturalWidth+'px in '+(Date.now()-t1)+' ms');o.textContent=r.join('\n')};im.onerror=function(){r.push('photo '+m[1]+': FAILED');o.textContent=r.join('\n')};im.src='/'+m[1];o.textContent=r.join('\n')}).catch(function(e){r.push('index.html FETCH FAILED: '+e);o.textContent=r.join('\n')});
+window.onerror=function(m,s,l){r.push('JS error: '+m+' @'+l);o.textContent=r.join('\n')};o.textContent=r.join('\n')}
+</script></body></html>

@@ -873,10 +873,10 @@
     transition:background-color .6s ease, color .6s ease, border-color .6s ease, box-shadow .6s ease !important;
   }
   /* circular reveal via View Transitions API */
-  ::view-transition-old(root), ::view-transition-new(root){animation:none;mix-blend-mode:normal;}
-  ::view-transition-new(root){animation:themeReveal .75s cubic-bezier(.4,0,.2,1);}
+  html.vt-theme::view-transition-old(root), html.vt-theme::view-transition-new(root){animation:none;mix-blend-mode:normal;}
+  html.vt-theme::view-transition-new(root){animation:themeReveal .75s cubic-bezier(.4,0,.2,1);}
   @keyframes themeReveal{from{clip-path:circle(0 at var(--tx,50%) var(--ty,0%));}to{clip-path:circle(150% at var(--tx,50%) var(--ty,0%));}}
-  @media (prefers-reduced-motion:reduce){::view-transition-new(root){animation:none;}}
+  @media (prefers-reduced-motion:reduce){html.vt-theme::view-transition-new(root){animation:none;}}
 
   /* ================= WOW layer: ambient motion ================= */
   #aurora{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:0;transition:opacity 1.6s ease;}
@@ -2195,7 +2195,9 @@
       root.style.setProperty('--tx', (r.left + r.width/2) + 'px'); root.style.setProperty('--ty', (r.top + r.height/2) + 'px');
       var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if(document.startViewTransition && !reduce){
-        document.startViewTransition(function(){ apply(next); });
+        root.classList.add('vt-theme');
+        var vt = document.startViewTransition(function(){ apply(next); });
+        (vt.finished || Promise.resolve()).then(function(){ root.classList.remove('vt-theme'); }, function(){ root.classList.remove('vt-theme'); });
       } else {
         root.classList.add('theme-switching'); apply(next);
         setTimeout(function(){ root.classList.remove('theme-switching'); }, 700);
