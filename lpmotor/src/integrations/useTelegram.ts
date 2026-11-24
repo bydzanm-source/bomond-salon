@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { listen, observeMutations } from "./sectionRuntime";
 
 type TelegramWebApp = {
@@ -79,32 +79,37 @@ export function useTelegram() {
     };
   }, [webApp]);
 
-  return (event: MouseEvent) => {
-    if (
-      !webApp ||
-      event.defaultPrevented ||
-      event.button !== 0 ||
-      event.metaKey ||
-      event.ctrlKey ||
-      event.shiftKey ||
-      event.altKey
-    )
-      return;
-    const link =
-      event.target instanceof Element ? event.target.closest("a[href]") : null;
-    if (!(link instanceof HTMLAnchorElement)) return;
-    const url = new URL(link.href);
-    if (url.protocol !== "https:" && url.protocol !== "http:") return;
-    if (url.origin === location.origin && link.target !== "_blank") return;
-    const isTelegram = ["t.me", "telegram.me"].includes(url.hostname);
-    const open = isTelegram ? webApp.openTelegramLink : webApp.openLink;
-    if (open) {
-      try {
-        open.call(webApp, url.href);
-        event.preventDefault();
-      } catch {
-        // Fall back to the browser link when the bridge fails.
+  return useCallback(
+    (event: MouseEvent) => {
+      if (
+        !webApp ||
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      )
+        return;
+      const link =
+        event.target instanceof Element
+          ? event.target.closest("a[href]")
+          : null;
+      if (!(link instanceof HTMLAnchorElement)) return;
+      const url = new URL(link.href);
+      if (url.protocol !== "https:" && url.protocol !== "http:") return;
+      if (url.origin === location.origin && link.target !== "_blank") return;
+      const isTelegram = ["t.me", "telegram.me"].includes(url.hostname);
+      const open = isTelegram ? webApp.openTelegramLink : webApp.openLink;
+      if (open) {
+        try {
+          open.call(webApp, url.href);
+          event.preventDefault();
+        } catch {
+          // Fall back to the browser link when the bridge fails.
+        }
       }
-    }
-  };
+    },
+    [webApp],
+  );
 }

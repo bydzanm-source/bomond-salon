@@ -285,6 +285,9 @@
   .hero-caption {
     animation: none;
   }
+  .hero-caption {
+    opacity: 1;
+  }
   .hero-content > * {
     opacity: 1;
     animation: none;

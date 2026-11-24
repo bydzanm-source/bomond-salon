@@ -113,6 +113,13 @@ const sections = await Promise.all(
     ) {
       throw new Error("Restricted Mottor HTML in " + name);
     }
+    if (html.includes("<!-- -->")) {
+      throw new Error(
+        "LPmotor removes React text separators in " +
+          name +
+          ". Combine adjacent text into one JSX expression.",
+      );
+    }
     for (const match of html.matchAll(/\sclass="([^"]+)"/g)) {
       if (
         match[1]
@@ -182,8 +189,8 @@ await writeFile(new URL("payload.json", output), serialized);
 
 const sectionRuntime = `const sectionJs = {
   ready: callback => callback(),
-  addEventListener: (target, event, listener) => target.addEventListener(event, listener),
-  removeEventListener: (target, event, listener) => target.removeEventListener(event, listener),
+  addEventListener: (target, event, listener, capture) => target.addEventListener(event, listener, capture),
+  removeEventListener: (target, event, listener, capture) => target.removeEventListener(event, listener, capture),
   createIntersectionObserver: (callback, options) => new IntersectionObserver(callback, options),
   createMutationObserver: callback => new MutationObserver(callback),
   setTimeout: (callback, delay) => window.setTimeout(callback, delay),

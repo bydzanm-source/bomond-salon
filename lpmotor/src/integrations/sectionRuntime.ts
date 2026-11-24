@@ -4,11 +4,13 @@ export type SectionRuntime = {
     target: EventTarget,
     type: string,
     listener: EventListener,
+    capture?: boolean,
   ) => void;
   removeEventListener: (
     target: EventTarget,
     type: string,
     listener: EventListener,
+    capture?: boolean,
   ) => void;
   createIntersectionObserver: (
     callback: IntersectionObserverCallback,
@@ -31,14 +33,15 @@ export function listen(
   target: EventTarget,
   type: string,
   listener: EventListener,
+  capture = false,
 ) {
   const runtime = sectionRuntime;
   if (runtime) {
-    runtime.addEventListener(target, type, listener);
-    return () => runtime.removeEventListener(target, type, listener);
+    runtime.addEventListener(target, type, listener, capture);
+    return () => runtime.removeEventListener(target, type, listener, capture);
   }
-  target.addEventListener(type, listener);
-  return () => target.removeEventListener(type, listener);
+  target.addEventListener(type, listener, capture);
+  return () => target.removeEventListener(type, listener, capture);
 }
 
 export function delay(callback: () => void, milliseconds: number) {

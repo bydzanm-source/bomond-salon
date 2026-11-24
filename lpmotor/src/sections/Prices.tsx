@@ -160,9 +160,9 @@ export function Prices() {
           ))}
         </div>
         <p className="prices-note">
-          Стоимость зависит от длины и структуры волос, а также от квалификации
-          мастера. Актуальный полный прайс уточняйте у администратора — напишите
-          нам в{" "}
+          {
+            "Стоимость зависит от длины и структуры волос, а также от квалификации мастера. Актуальный полный прайс уточняйте у администратора — напишите нам в "
+          }
           <a
             className="prices-note-link"
             href={studio.whatsapp}
@@ -170,8 +170,8 @@ export function Prices() {
             rel="noopener"
           >
             WhatsApp
-          </a>{" "}
-          или{" "}
+          </a>
+          {" или "}
           <a
             className="prices-note-link"
             href={studio.telegramBooking}

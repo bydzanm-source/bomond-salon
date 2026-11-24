@@ -30,7 +30,7 @@ export function Contacts() {
                   Понедельник — воскресенье
                 </span>
                 <span className="contacts-hours-time">
-                  {studio.opens} – {studio.closes}
+                  {`${studio.opens} – ${studio.closes}`}
                 </span>
               </div>
               <p className="contacts-note">Без выходных, работаем по записи</p>

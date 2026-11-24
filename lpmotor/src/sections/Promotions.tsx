@@ -80,7 +80,7 @@ export function Promotions() {
         <div className="promotions-referral promotions-reveal" id="referral">
           <p className="promotions-eyebrow">Постоянная акция</p>
           <h3 className="promotions-ref-title">
-            Приведи подругу —{" "}
+            {"Приведи подругу — "}
             <span className="promotions-shine">скидка обеим</span>
           </h3>
           <div className="promotions-ref-grid">
@@ -176,7 +176,7 @@ export function Promotions() {
         </div>
 
         <p className="promotions-closing">
-          Новые акции появляются каждый месяц — следите за анонсами в нашем{" "}
+          {"Новые акции появляются каждый месяц — следите за анонсами в нашем "}
           <a
             href={studio.telegram}
             target="_blank"

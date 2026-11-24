@@ -15,9 +15,27 @@ export function MottorSite() {
   }, []);
 
   useEffect(() => {
-    return listen(document, "click", (event) => {
-      if (event instanceof MouseEvent) telegramClick(event);
-    });
+    return listen(
+      document,
+      "click",
+      (event) => {
+        if (!(event instanceof MouseEvent)) return;
+        const link =
+          event.target instanceof Element
+            ? event.target.closest("a[href]")
+            : null;
+        if (
+          !(link instanceof HTMLAnchorElement) ||
+          !link.closest("[data-bomond-island], #bomond-floating-root")
+        )
+          return;
+        telegramClick(event);
+        // LPmotor's smooth-scroll handler treats external fragments as local selectors.
+        if (link.origin !== location.origin && link.hash)
+          event.stopPropagation();
+      },
+      true,
+    );
   }, [telegramClick]);
 
   return bookingHost ? createPortal(<FloatingBooking />, bookingHost) : null;
