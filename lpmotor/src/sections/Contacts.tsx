@@ -14,13 +14,14 @@ export function Contacts() {
             <div className="contacts-card contacts-reveal">
               <h3 className="contacts-card-title">Адрес</h3>
               <p className="contacts-address">{studio.fullAddress}</p>
+              <p className="contacts-note">Вход со двора</p>
               <a
                 href={studio.directions}
                 target="_blank"
                 rel="noopener"
                 className="contacts-route-link"
               >
-                Нажмите, чтобы построить маршрут в Яндекс Картах →
+                Построить маршрут до входа в Яндекс Картах →
               </a>
             </div>
             <div className="contacts-card contacts-reveal">
@@ -100,23 +101,31 @@ export function Contacts() {
           </div>
           <div className="contacts-map">
             <div className="contacts-map-card contacts-reveal">
-              <span className="contacts-map-brand">Bomond</span>
-              <a
-                className="contacts-map-address"
-                href={studio.yandex}
-                target="_blank"
-                rel="noopener"
-              >
-                {`${studio.street}, ${studio.city}`}
-              </a>
-              <a
-                href={studio.directions}
-                target="_blank"
-                rel="noopener"
-                className="contacts-map-btn"
-              >
-                Построить маршрут
-              </a>
+              <iframe
+                className="contacts-map-frame"
+                src={studio.entranceMap}
+                title="Яндекс Карты — вход в Bomond со двора"
+                loading="lazy"
+              />
+              <div className="contacts-map-details">
+                <span className="contacts-map-brand">Bomond</span>
+                <a
+                  className="contacts-map-address"
+                  href={studio.yandex}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  {`${studio.street}, ${studio.city}`}
+                </a>
+                <a
+                  href={studio.directions}
+                  target="_blank"
+                  rel="noopener"
+                  className="contacts-map-btn"
+                >
+                  Маршрут ко входу
+                </a>
+              </div>
             </div>
           </div>
         </div>
