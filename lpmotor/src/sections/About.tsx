@@ -45,14 +45,18 @@ export function About() {
           <div className="about-photos about-reveal">
             <div className="about-photo-main">
               <img
-                src="https://m-files.cdn1.cc/lpfile/f/c/2/fc22baa16eb07a79e5fa5820feecb46e.jpg"
+                src="https://m-files.cdn1.cc/lpfile/8/4/5/8453c7d8acc89ed32f44b6ee354ba3c4.webp"
+                width={760}
+                height={1112}
                 alt="Команда студии красоты Bomond в полном составе"
                 loading="lazy"
               />
             </div>
             <div className="about-photo-accent">
               <img
-                src="https://m-files.cdn1.cc/lpfile/c/1/e/c1e1409e8da36a498be1231883db80ac.jpeg"
+                src="https://m-files.cdn1.cc/lpfile/b/9/6/b96675be694701a5d48bb4a59d367831.webp"
+                width={480}
+                height={728}
                 alt="Мастера студии красоты Bomond"
                 loading="lazy"
               />
@@ -65,7 +69,9 @@ export function About() {
           <div className="about-lineup">
             <img
               className="about-photo"
-              src="https://m-files.cdn1.cc/lpfile/5/b/1/5b13eaff321dca64cb2d4dc738683c91.jpg"
+              src="https://m-files.cdn1.cc/lpfile/8/3/3/833c352bb19f10989ab5edab9d497f14.webp"
+              width={1360}
+              height={906}
               alt="Команда студии красоты Bomond в полном составе"
               loading="lazy"
             />

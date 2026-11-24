@@ -42,9 +42,14 @@ export function Hero() {
         <div className="hero-media">
           <img
             className="hero-photo"
-            src="https://m-files.cdn1.cc/lpfile/e/9/e/e9eb85b6cd73185acfd03869f2c86048.jpg"
+            src="https://m-files.cdn1.cc/lpfile/9/b/2/9b228f61293b1099d8585e582e475b7f.webp"
+            srcSet="https://m-files.cdn1.cc/lpfile/9/3/a/93a906fb310f5fbe45734553dfcb1848.webp 420w, https://m-files.cdn1.cc/lpfile/9/b/2/9b228f61293b1099d8585e582e475b7f.webp 700w"
+            sizes="(max-width: 480px) calc(100vw - 40px), 460px"
             alt="Татьяна Буева, главный мастер-колорист Bomond"
+            width={700}
+            height={987}
             loading="eager"
+            fetchPriority="high"
           />
           <div className="hero-caption">Татьяна Буева · главный колорист</div>
         </div>

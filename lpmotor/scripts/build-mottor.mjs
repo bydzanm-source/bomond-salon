@@ -81,6 +81,9 @@ await build({
 const { renderSections } = await import(new URL("mottor-server.js", output));
 const css = (name) =>
   readFile(new URL("src/styles/" + name + ".css", project), "utf8");
+// Use distinct family names so LPmotor's built-in font faces cannot load too.
+const useBomondFonts = (styles) =>
+  styles.replace(/"(Manrope|EB Garamond)"/g, '"Bomond $1"');
 const [tokens, ambientTokens, ambient, booking, leaves, fonts, index] =
   await Promise.all([
     css("tokens"),
@@ -101,17 +104,21 @@ if (!headScripts)
 
 // LPmotor nests section rules under a block ID, so theme variables belong in the site head.
 const sharedCss = (
-  await transformWithEsbuild(tokens + ambientTokens, "shared.css", {
-    loader: "css",
-    minify: true,
-  })
+  await transformWithEsbuild(
+    useBomondFonts(fonts + tokens + ambientTokens),
+    "shared.css",
+    {
+      loader: "css",
+      minify: true,
+    },
+  )
 ).code;
 const pageHead = headScripts + "<style>" + sharedCss + "</style>";
 if (pageHead.length > 4000)
   throw new Error("LPmotor site head exceeds its limit.");
 
 const floatingCss = (
-  await transformWithEsbuild(booking + leaves, "floating.css", {
+  await transformWithEsbuild(useBomondFonts(booking + leaves), "floating.css", {
     loader: "css",
     minify: true,
   })
@@ -155,10 +162,14 @@ const sections = await Promise.all(
           .replace('@import "./ambient-tokens.css";', "")
           .replaceAll("[data-ambient-backdrop]", "." + prefix + "-aurora");
     const sectionCss = (
-      await transformWithEsbuild(style + scopedAmbient, name + ".css", {
-        loader: "css",
-        minify: true,
-      })
+      await transformWithEsbuild(
+        useBomondFonts(style + scopedAmbient),
+        name + ".css",
+        {
+          loader: "css",
+          minify: true,
+        },
+      )
     ).code;
 
     if (
@@ -201,7 +212,7 @@ const sectionRuntime = `const sectionJs = {
 const preview = `<!doctype html><html lang="ru"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,follow"><title>Стенд Bomond</title>
-<style>body{margin:0}${fonts}${sections.map(({ ms_css }) => ms_css).join("\n")}</style>
+<style>body{margin:0}${sections.map(({ ms_css }) => ms_css).join("\n")}</style>
 ${pageHead}</head><body>${sections.map(({ ms_html }) => ms_html).join("\n")}
 ${pageBody}<script>${sectionRuntime}\n${script}</script></body></html>`;
 await writeFile(new URL("preview.html", output), preview);

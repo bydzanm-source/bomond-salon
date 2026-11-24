@@ -32,10 +32,13 @@ test("navigation, price tabs, reviews, persistent theme and booking", async ({
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/?season=winter", { waitUntil: "domcontentloaded" });
   await expect(page.locator("html")).toHaveAttribute("data-season", "winter");
+  await expect(page.locator("#telegram-sdk")).toHaveCount(0);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "Входите в BOMOND",
   );
-  await expect(page.locator(".hero-photo")).toBeVisible();
+  const portrait = page.locator(".hero-photo");
+  await expect(portrait).toBeVisible();
+  await expect(portrait).toHaveAttribute("fetchpriority", "high");
   await expect(page.locator(".header-header")).toHaveCSS(
     "background-color",
     "rgb(250, 246, 241)",
@@ -126,7 +129,9 @@ test("Telegram Mini App uses the Telegram bridge for booking", async ({
     } };`,
     }),
   );
-  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.goto("/#tgWebAppPlatform=ios&tgWebAppVersion=8.0", {
+    waitUntil: "domcontentloaded",
+  });
   await expect(page.locator("html")).toHaveAttribute(
     "data-telegram-ready",
     "true",
