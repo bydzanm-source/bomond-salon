@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import snowCap from "../assets/snow/powder-cap.webp?inline";
 import { observeSnowfall } from "./snowMotion";
 import "../styles/snow.css";
 
@@ -73,10 +74,15 @@ function Flurry({ tracks }: { tracks: number[][] }) {
   ));
 }
 
-const ridges = [
-  "M1 23 Q6 18 15 17 Q22 8 33 11 Q44 3 57 9 Q69 1 82 8 Q91 7 99 13 Q108 9 118 14 Q134 12 153 22 Q113 24 78 23 Q35 24 1 23Z",
-  "M1 23 Q12 17 21 17 Q29 12 37 14 Q50 5 62 11 Q76 3 92 10 Q104 8 113 15 Q126 13 153 23 Q117 24 77 23 Q33 24 1 23Z",
-];
+// Collision outline sampled from the alpha channel of the Blender render.
+const ridgeOutline = [
+  "M4.8,19.35 L9.6,17.81 L14.4,17.03 L19.2,13.16 L24.1,10.06 L28.9,6.97 L33.7,7.74 L38.5,6.19 L43.3,4.65 L48.1,3.87 L52.9,3.87 L57.8,7.74",
+  "L62.6,6.19 L67.4,4.65 L72.2,0.0 L77.0,0.0 L81.8,3.1 L86.6,6.19 L91.4,7.74 L96.2,4.65 L101.1,5.42 L105.9,5.42 L110.7,8.52 L115.5,7.74",
+  "L120.3,7.74 L125.1,6.97 L129.9,9.29 L134.8,13.16 L139.6,15.48 L144.4,17.81 L149.2,19.35 L149.2,21.68 L144.4,22.45 L139.6,22.45 L134.8,23.23 L129.9,24.0",
+  "L125.1,24.0 L120.3,24.0 L115.5,24.0 L110.7,24.0 L105.9,24.0 L101.1,24.0 L96.2,24.0 L91.4,24.0 L86.6,24.0 L81.8,24.0 L77.0,24.0 L72.2,24.0",
+  "L67.4,24.0 L62.6,24.0 L57.8,24.0 L52.9,24.0 L48.1,24.0 L43.3,24.0 L38.5,24.0 L33.7,24.0 L28.9,24.0 L24.1,24.0 L19.2,23.23 L14.4,22.45",
+  "L9.6,22.45 L4.8,21.68 Z",
+].join(" ");
 
 export function Snowfall() {
   const layer = useRef<HTMLDivElement>(null);
@@ -98,11 +104,12 @@ export function Snowfall() {
             preserveAspectRatio="none"
             focusable="false"
           >
-            <path fill="#f9fbff" d={ridges[index % ridges.length]} />
-            <path
-              fill="#dce8f3"
-              fillOpacity=".8"
-              d="M3 22 Q20 22 34 18 Q47 20 61 16 Q76 20 91 17 Q111 21 126 19 Q142 22 153 22 Q115 24 78 23 Q34 24 3 22Z"
+            <path fill="transparent" d={ridgeOutline} />
+            <image
+              href={snowCap}
+              width={154}
+              height={24}
+              preserveAspectRatio="none"
             />
           </svg>
           <span className="snow-contact">

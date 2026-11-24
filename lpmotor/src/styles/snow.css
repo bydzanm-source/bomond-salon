@@ -88,7 +88,7 @@
 .snow-drift {
   position: absolute;
   height: 23px;
-  translate: 0 -94%;
+  translate: 0 -100%;
   visibility: hidden;
 }
 

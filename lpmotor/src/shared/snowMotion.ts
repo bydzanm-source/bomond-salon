@@ -1,9 +1,6 @@
 import { delay, listen } from "../integrations/sectionRuntime";
-import {
-  findSeasonalSurfaces,
-  firstTextLine,
-  type SeasonalSurface,
-} from "./seasonalSurfaces";
+import { findSeasonalSurfaces, type SeasonalSurface } from "./seasonalSurfaces";
+import { headingSupports } from "./snowAnchor";
 
 type SnowBank = {
   element: HTMLElement;
@@ -12,6 +9,7 @@ type SnowBank = {
   profile: SVGPathElement;
   target?: Element;
   kind?: SeasonalSurface;
+  followsPhoto?: boolean;
   flight?: Animation;
   growth?: Animation;
   cancelNext?: () => void;
@@ -23,36 +21,7 @@ const landingScale = 0.48;
 const heightAtDepth = (depth: number) => 0.34 + depth * 0.18;
 const between = (min: number, max: number) => min + Math.random() * (max - min);
 
-// Each waypoint gives the time, sideways displacement and remaining height.
-const descentRoutes = [
-  [
-    [0, 1, 1],
-    [0.26, 0.82, 0.74],
-    [0.54, 0.46, 0.42],
-    [0.78, 0.12, 0.15],
-  ],
-  [
-    [0, -0.68, 1],
-    [0.17, 0.32, 0.79],
-    [0.38, -0.54, 0.6],
-    [0.58, 0.48, 0.43],
-    [0.78, -0.21, 0.19],
-  ],
-  [
-    [0, 0.8, 1],
-    [0.23, 0.5, 0.74],
-    [0.52, -0.69, 0.39],
-    [0.74, -0.54, 0.22],
-    [0.87, -0.16, 0.07],
-  ],
-  [
-    [0, -0.93, 1],
-    [0.23, -0.45, 0.61],
-    [0.43, 0.5, 0.36],
-    [0.58, 0.72, 0.43],
-    [0.77, 0.2, 0.19],
-  ],
-];
+const flutterCycles = [0.67, 1.02, 1.38, 1.76];
 
 function snowSurface(bank: SnowBank, lane: number, depth: number) {
   const { width, height } = bank.ridge.viewBox.baseVal;
@@ -83,8 +52,11 @@ export function observeSnowfall(layer: HTMLElement) {
     profile: element.querySelector<SVGPathElement>(".snow-ridge path")!,
   }));
   const depths = new WeakMap<Element, number>();
+  let headingBoxes = new WeakMap<Element, ReturnType<typeof headingSupports>>();
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
   let frame = 0;
+  let photoFrame = 0;
+  let lastPhotoFrame = 0;
   let viewportWidth = layer.clientWidth;
   let cancelRescan: (() => void) | undefined;
   let cancelWeather: (() => void) | undefined;
@@ -132,63 +104,63 @@ export function observeSnowfall(layer: HTMLElement) {
     position(bank, index);
     const previous = depths.get(target) ?? 0;
     const side = Math.random() < 0.5 ? 1 : -1;
-    const lastRoute = bank.lastRoute ?? descentRoutes.length;
+    const lastRoute = bank.lastRoute ?? flutterCycles.length;
     const draw = Math.floor(
       Math.random() *
-        (descentRoutes.length - Number(bank.lastRoute !== undefined)),
+        (flutterCycles.length - Number(bank.lastRoute !== undefined)),
     );
     const route = draw >= lastRoute ? draw + 1 : draw;
     bank.lastRoute = route;
-    const amplitude = Math.min(between(72, 151), layer.clientWidth * 0.32);
-    const lane = between(0.28, 0.72);
+    const amplitude = Math.min(between(21, 51), layer.clientWidth * 0.13);
+    const lane = between(0.25, 0.75);
     const surface = snowSurface(bank, lane, previous);
     const halfFlake = bank.flake.offsetWidth / 2;
     const pose = (x: number, y: number, angle: number, scale = 1) =>
       `translate3d(${surface.x + x - halfFlake}px,${y - halfFlake}px,0) rotate(${angle}deg) scale(${scale})`;
     const distance = Math.min(
-      between(132, 300),
+      between(120, 265),
       Math.max(32, bank.element.offsetTop - 55),
     );
     const contactY = surface.y - halfFlake * landingScale * 0.88;
     const contact = pose(0, contactY, 100, landingScale);
     const origin = bank.element.offsetLeft + surface.x;
-    const tilt = between(65, 140) * side;
-    const approach = descentRoutes[route].map(([offset, sway, height]) => {
-      const x = sway * side * amplitude - wind * height * 0.68;
-      const boundedX = Math.max(
-        15 - origin,
-        Math.min(x, layer.clientWidth - 15 - origin),
+    const tilt = between(38, 85) * side;
+    const entry = side * between(22, 61) - wind * 0.61;
+    const phase = between(0, Math.PI * 2);
+    // Sample a continuous drift so neither direction nor descent speed snaps at a turn.
+    const approach = Array.from({ length: 25 }, (_, step) => {
+      const offset = step / 24;
+      const remaining = 1 - offset;
+      const flutter = Math.sin(
+        phase + offset * Math.PI * 2 * flutterCycles[route],
       );
+      const x =
+        entry * remaining ** 1.25 +
+        amplitude * flutter * Math.sin(Math.PI * offset) * remaining ** 0.45;
+      const room = Math.max(
+        1,
+        x < 0 ? origin - 10 : layer.clientWidth - 10 - origin,
+      );
+      const boundedX = room * Math.tanh(x / room);
+      const scale =
+        landingScale + (0.74 - landingScale) * Math.min(1, remaining * 5);
       return {
         offset,
         transform: pose(
           boundedX,
-          contactY - distance * height,
-          100 - tilt * (1 - offset),
-          1 - offset * 0.29,
+          contactY - distance * remaining ** 1.16,
+          100 + tilt * remaining + flutter * 19 * remaining,
+          scale,
         ),
-        opacity: offset === 0 ? 0 : 0.96,
-        easing: "cubic-bezier(.32,.16,.63,.89)",
+        opacity: Math.min(0.97, offset * 9),
       };
     });
-    const flight = bank.flake.animate(
-      [
-        ...approach,
-        {
-          transform: pose(side * 5, contactY - 6, 100 - tilt * 0.07, 0.61),
-          opacity: 0.94,
-          offset: 0.93,
-        },
-        {
-          transform: contact,
-          opacity: 0.97,
-        },
-      ],
-      {
-        duration: between(1540, 2320) + index * 165,
-        fill: "forwards",
-      },
-    );
+    const flight = bank.flake.animate(approach, {
+      duration:
+        Math.max(1450, Math.min(3100, distance * between(10.3, 14.2))) +
+        index * 85,
+      fill: "forwards",
+    });
     bank.flight = flight;
     flight.onfinish = () => {
       if (bank.flight !== flight) return;
@@ -209,16 +181,15 @@ export function observeSnowfall(layer: HTMLElement) {
         ],
         { duration: 410, easing: "cubic-bezier(.21,.62,.39,1)" },
       );
-      const rise = surface.y - snowSurface(bank, lane, next).y;
       const merge = bank.flake.animate(
         [
           { transform: contact, opacity: 0.97 },
           {
-            transform: pose(0, surface.y - rise * 0.55, 103, 0.26),
+            transform: pose(side * 1.5, contactY + 1.5, 105, 0.35),
             opacity: 0.6,
             offset: 0.45,
           },
-          { transform: pose(0, surface.y - rise, 108, 0.12), opacity: 0 },
+          { transform: pose(side * 2, contactY + 3, 108, 0.12), opacity: 0 },
         ],
         { duration: 330, easing: "ease-out" },
       );
@@ -238,28 +209,30 @@ export function observeSnowfall(layer: HTMLElement) {
   function position(bank: SnowBank, index: number) {
     const { target, kind, element } = bank;
     if (!target?.isConnected || !kind) return false;
-    const rect =
-      kind === "heading"
-        ? firstTextLine(target)
-        : target.getBoundingClientRect();
+    const rect = target.getBoundingClientRect();
     if (rect.top < 50 || rect.top > layer.clientHeight + 12 || rect.width < 35)
       return false;
-    const width =
-      kind === "photo"
-        ? Math.min(155, Math.max(70, rect.width * 0.28))
-        : Math.min(76, Math.max(38, rect.width * 0.32));
-    const offset =
-      index === 2
-        ? rect.left + Math.min(16, rect.width * 0.05)
-        : rect.right -
-          width -
-          (kind === "photo" ? Math.min(38, rect.width * 0.1) : 0);
+    let width = Math.min(
+      176,
+      Math.max(66, (target as HTMLElement).offsetWidth * 0.34),
+    );
+    let offset = index === 2 ? rect.left + 24 : rect.right - width - 30;
+    let edge = rect.top;
+    if (kind === "heading") {
+      if (!headingBoxes.has(target))
+        headingBoxes.set(target, headingSupports(target));
+      const support = headingBoxes.get(target);
+      const glyph = index === 2 ? support?.first : support?.last;
+      if (!glyph) return false;
+      width = Math.max(12, Math.min(104, glyph.width * 0.88));
+      offset = rect.left + glyph.left + (glyph.width - width) / 2;
+      edge += glyph.top;
+    }
     element.style.left =
-      Math.round(Math.max(6, Math.min(offset, layer.clientWidth - width - 6))) +
+      Math.max(6, Math.min(offset, layer.clientWidth - width - 6)).toFixed(2) +
       "px";
-    element.style.top =
-      Math.round(rect.top + (kind === "photo" ? 3 : 7)) + "px";
-    element.style.width = Math.round(width) + "px";
+    element.style.top = (edge + 2.4).toFixed(2) + "px";
+    element.style.width = width.toFixed(2) + "px";
     return true;
   }
 
@@ -267,6 +240,7 @@ export function observeSnowfall(layer: HTMLElement) {
     stopFlight(bank);
     bank.target = undefined;
     bank.kind = undefined;
+    bank.followsPhoto = false;
     delete bank.element.dataset.snowSurface;
     delete bank.element.dataset.snowDepth;
   }
@@ -296,10 +270,27 @@ export function observeSnowfall(layer: HTMLElement) {
         continue;
       }
       bank.element.dataset.snowSurface = bank.kind;
+      bank.followsPhoto =
+        bank.kind === "photo" &&
+        getComputedStyle(target).animationName !== "none";
       paintDepth(bank, motion.matches ? 3 : (depths.get(target) ?? 0));
       if (!motion.matches && typeof bank.flake.animate === "function")
         sendFlake(bank, index);
     }
+    if (!photoFrame && banks.some((bank) => bank.followsPhoto))
+      photoFrame = requestAnimationFrame(followPhotos);
+  }
+
+  function followPhotos(now: number) {
+    photoFrame = 0;
+    if (document.hidden || !banks.some((bank) => bank.followsPhoto)) return;
+    if (now - lastPhotoFrame >= 40) {
+      lastPhotoFrame = now;
+      banks.forEach((bank, index) => {
+        if (bank.followsPhoto) position(bank, index);
+      });
+    }
+    photoFrame = requestAnimationFrame(followPhotos);
   }
 
   function update() {
@@ -335,6 +326,7 @@ export function observeSnowfall(layer: HTMLElement) {
       return;
     }
     viewportWidth = layer.clientWidth;
+    headingBoxes = new WeakMap();
     reset();
   }
 
@@ -354,7 +346,10 @@ export function observeSnowfall(layer: HTMLElement) {
   ];
   motion.addEventListener("change", onMotionChange);
   void document.fonts.ready.then(() => {
-    if (layer.isConnected) update();
+    if (layer.isConnected) {
+      headingBoxes = new WeakMap();
+      update();
+    }
   });
   rescan();
   weather();
@@ -364,6 +359,7 @@ export function observeSnowfall(layer: HTMLElement) {
     cancelRescan?.();
     cancelWeather?.();
     cancelAnimationFrame(frame);
+    cancelAnimationFrame(photoFrame);
     banks.forEach(release);
   };
 }

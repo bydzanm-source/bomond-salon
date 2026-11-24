@@ -385,6 +385,65 @@ test("snowflakes build caps on text and photos and follow their anchors", async 
   await expect(photo).toHaveAttribute("data-snow-depth", /^[1-4]$/);
   await expect(heading).toHaveAttribute("data-snow-depth", /^[2-4]$/);
   await expect(photo).toHaveAttribute("data-snow-depth", /^[2-4]$/);
+  const glyphContact = await heading.evaluate((cap) => {
+    const brand = document.querySelector("h1 span")!;
+    const text = brand.firstChild!;
+    const glyph = new Range();
+    glyph.setStart(text, text.textContent!.length - 1);
+    glyph.setEnd(text, text.textContent!.length);
+    const box = glyph.getBoundingClientRect();
+    const style = getComputedStyle(brand);
+    const context = document.createElement("canvas").getContext("2d")!;
+    context.font = [style.fontWeight, style.fontSize, style.fontFamily].join(
+      " ",
+    );
+    const metrics = context.measureText("D");
+    const letterTop =
+      box.top +
+      (box.height +
+        metrics.fontBoundingBoxAscent -
+        metrics.fontBoundingBoxDescent) /
+        2 -
+      metrics.actualBoundingBoxAscent;
+    const snowBase = cap.querySelector("path")!.getBoundingClientRect();
+    glyph.setStart(text, text.textContent!.length - 2);
+    const wordEdge = glyph.getBoundingClientRect();
+    return {
+      overlap: snowBase.bottom - letterTop,
+      spansBothLetters:
+        snowBase.left < box.left &&
+        snowBase.right > box.left &&
+        snowBase.left >= wordEdge.left &&
+        snowBase.right <= wordEdge.right,
+    };
+  });
+  expect(glyphContact.spansBothLetters).toBe(true);
+  expect(glyphContact.overlap).toBeGreaterThan(0);
+  expect(glyphContact.overlap).toBeLessThan(4);
+
+  const portrait = page.locator(".hero-photo");
+  const originalTop = (await portrait.boundingBox())!.y;
+  await portrait.evaluate((image) => {
+    const zoom = image
+      .getAnimations()
+      .find(
+        (animation) => animation.effect?.getTiming().iterations === Infinity,
+      )!;
+    zoom.pause();
+    zoom.currentTime = 17600;
+  });
+  const zoomedTop = (await portrait.boundingBox())!.y;
+  expect(originalTop - zoomedTop).toBeGreaterThan(8);
+  await expect
+    .poll(async () => {
+      const snowBase = (await photo
+        .locator(".snow-ridge path")
+        .first()
+        .boundingBox())!;
+      return Math.abs(snowBase.y + snowBase.height - zoomedTop - 2);
+    })
+    .toBeLessThan(1.5);
+
   const before = (await heading.boundingBox())!.y;
   await page.evaluate(() => window.scrollBy({ top: 74, behavior: "instant" }));
   await expect
@@ -482,7 +541,7 @@ test("the same snow cap receives visibly different approaches", async ({
   const cap = page.locator('[data-snow-surface="heading"]').first();
   const approaches = await cap.evaluate(async (bank) => {
     const flake = bank.querySelector(".snow-contact")!;
-    const routes: { offsets: string; sweep: number }[] = [];
+    const routes: { shape: string; sweep: number; descends: boolean }[] = [];
     let previous: Animation | undefined;
     for (let index = 0; index < 5; index++) {
       const flight = await new Promise<Animation>((resolve) => {
@@ -500,12 +559,20 @@ test("the same snow cap receives visibly different approaches", async ({
         nextFrame();
       });
       const frames = (flight.effect as KeyframeEffect).getKeyframes();
-      const coordinates = frames.map((frame) =>
-        Number(String(frame.transform).match(/translate3d\(([-.\d]+)/)?.[1]),
+      const coordinates = frames.map(
+        (frame) => new DOMMatrixReadOnly(String(frame.transform)),
       );
+      const destination = coordinates[coordinates.length - 1];
       routes.push({
-        offsets: frames.map((frame) => frame.computedOffset).join(","),
-        sweep: Math.max(...coordinates) - Math.min(...coordinates),
+        shape: coordinates
+          .map((point) => Math.round((point.m41 - destination.m41) / 4))
+          .join(","),
+        sweep:
+          Math.max(...coordinates.map((point) => point.m41)) -
+          Math.min(...coordinates.map((point) => point.m41)),
+        descends: coordinates.every(
+          (point, i) => i === 0 || point.m42 > coordinates[i - 1].m42,
+        ),
       });
       previous = flight;
       flight.finish();
@@ -515,10 +582,11 @@ test("the same snow cap receives visibly different approaches", async ({
   expect(
     approaches.every(
       (route, index) =>
-        index === 0 || route.offsets !== approaches[index - 1].offsets,
+        index === 0 || route.shape !== approaches[index - 1].shape,
     ),
   ).toBe(true);
+  expect(approaches.every((route) => route.descends)).toBe(true);
   expect(Math.max(...approaches.map((route) => route.sweep))).toBeGreaterThan(
-    40,
+    25,
   );
 });
