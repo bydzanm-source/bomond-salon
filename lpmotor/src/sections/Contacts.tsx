@@ -130,7 +130,6 @@ export function Contacts() {
                   className="contacts-map-frame"
                   src={studio.entranceMap}
                   title="Яндекс Карты — вход в Bomond со двора"
-                  loading="lazy"
                 />
               ) : (
                 <ContactApproach />
