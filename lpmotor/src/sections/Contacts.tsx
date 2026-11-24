@@ -1,8 +1,12 @@
+import { useState } from "react";
 import { AmbientBackdrop } from "../shared/AmbientBackdrop";
 import { studio } from "../content/studio";
+import { ContactApproach } from "./ContactApproach";
 import "../styles/contacts.css";
 
 export function Contacts() {
+  const [showMap, setShowMap] = useState(false);
+
   return (
     <section className="contacts-contacts" id="contacts">
       <AmbientBackdrop className="contacts-aurora" />
@@ -101,12 +105,36 @@ export function Contacts() {
           </div>
           <div className="contacts-map">
             <div className="contacts-map-card contacts-reveal">
-              <iframe
-                className="contacts-map-frame"
-                src={studio.entranceMap}
-                title="Яндекс Карты — вход в Bomond со двора"
-                loading="lazy"
-              />
+              <div
+                className="contacts-map-controls"
+                aria-label="Как добраться"
+                role="group"
+              >
+                <button
+                  type="button"
+                  aria-pressed={!showMap}
+                  onClick={() => setShowMap(false)}
+                >
+                  Схема проезда
+                </button>
+                <button
+                  type="button"
+                  aria-pressed={showMap}
+                  onClick={() => setShowMap(true)}
+                >
+                  Яндекс Карты
+                </button>
+              </div>
+              {showMap ? (
+                <iframe
+                  className="contacts-map-frame"
+                  src={studio.entranceMap}
+                  title="Яндекс Карты — вход в Bomond со двора"
+                  loading="lazy"
+                />
+              ) : (
+                <ContactApproach />
+              )}
               <div className="contacts-map-details">
                 <span className="contacts-map-brand">Bomond</span>
                 <a

@@ -16,7 +16,8 @@ test("server HTML includes the whole page and indexing metadata", async ({
   expect(html).toContain(studio.booking);
   expect(html).toContain("rtext=~55.79491018,37.93238849&amp;rtt=pd");
   expect(html).toContain("Вход со двора");
-  expect(html).toContain("whatshere%5Bpoint%5D=37.93238849%2C55.79491018");
+  expect(html).toContain("Слева от дома");
+  expect(html).toContain("Через арку");
   expect(html).toContain(
     '"geo":{"@type":"GeoCoordinates","latitude":55.794874,"longitude":37.932743}',
   );
@@ -120,6 +121,29 @@ test("navigation, price tabs, reviews, persistent theme and booking", async ({
   ]);
   await expect(popup).toHaveURL(studio.booking);
   expect(errors).toEqual([]);
+});
+
+test("contacts show both courtyard approaches and open the interactive map", async ({
+  page,
+}) => {
+  await page.route("https://yandex.ru/map-widget/v1/**", (route) =>
+    route.fulfill({ body: "Карта", contentType: "text/html" }),
+  );
+  await page.goto("/#contacts", { waitUntil: "domcontentloaded" });
+  const contacts = page.locator("#contacts");
+  const mapButton = contacts.getByRole("button", { name: "Яндекс Карты" });
+  await expect(
+    contacts.getByRole("img", { name: /проход слева от дома и через арку/i }),
+  ).toBeVisible();
+  await expect(contacts.locator("iframe")).toHaveCount(0);
+  await mapButton.click();
+  await expect(mapButton).toHaveAttribute("aria-pressed", "true");
+  await expect(contacts.locator("iframe")).toHaveAttribute(
+    "src",
+    /37\.93238849%2C55\.79491018.*&z=18$/,
+  );
+  await contacts.getByRole("button", { name: "Схема проезда" }).click();
+  await expect(contacts.locator("iframe")).toHaveCount(0);
 });
 
 test("Telegram Mini App uses the Telegram bridge for booking", async ({

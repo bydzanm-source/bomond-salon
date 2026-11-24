@@ -32,7 +32,7 @@ export const studio = {
   yandex: "https://yandex.ru/maps/org/bomond/130025090200/",
   yandexReviews: "https://yandex.ru/maps/org/bomond/130025090200/reviews/",
   directions: `https://yandex.ru/maps/?rtext=~${courtyardEntrance.latitude},${courtyardEntrance.longitude}&rtt=pd&ll=${entrancePoint}&z=19`,
-  entranceMap: `https://yandex.ru/map-widget/v1/?mode=whatshere&whatshere%5Bpoint%5D=${encodeURIComponent(entrancePoint)}&whatshere%5Bzoom%5D=19&ll=${encodeURIComponent(entrancePoint)}&z=19`,
+  entranceMap: `https://yandex.ru/map-widget/v1/?mode=whatshere&whatshere%5Bpoint%5D=${encodeURIComponent(entrancePoint)}&whatshere%5Bzoom%5D=18&ll=${encodeURIComponent(entrancePoint)}&z=18`,
   teamPhoto:
     "https://m-files.cdn1.cc/lpfile/5/b/1/5b13eaff321dca64cb2d4dc738683c91.jpg",
   socialImage:
