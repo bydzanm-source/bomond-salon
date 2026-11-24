@@ -3,13 +3,14 @@ import { createPortal } from "react-dom";
 import { listen } from "../integrations/sectionRuntime";
 import { useTelegram } from "../integrations/useTelegram";
 import { FallingLeaves } from "../shared/FallingLeaves";
+import { Snowfall } from "../shared/Snowfall";
 import { FloatingBooking } from "../shared/FloatingBooking";
 import { useSeason } from "../shared/useSeason";
 
 export function MottorSite() {
   const telegramClick = useTelegram();
   const [bookingHost, setBookingHost] = useState<HTMLElement | null>(null);
-  useSeason();
+  const season = useSeason();
 
   useEffect(() => {
     setBookingHost(document.getElementById("bomond-floating-root"));
@@ -42,7 +43,8 @@ export function MottorSite() {
   return bookingHost
     ? createPortal(
         <>
-          <FallingLeaves />
+          {season === "autumn" && <FallingLeaves />}
+          {season === "winter" && <Snowfall />}
           <FloatingBooking />
         </>,
         bookingHost,

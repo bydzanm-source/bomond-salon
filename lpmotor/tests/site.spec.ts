@@ -352,3 +352,47 @@ test("leaves stay in view while scrolling and land on newly visible cards", asyn
     )
     .toBe(true);
 });
+
+test("winter begins at Moscow midnight on December 1", async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-11-30T20:59:59Z"));
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute("data-season", "autumn");
+  await expect(page.locator(".snowfall")).toHaveCount(0);
+
+  await page.clock.setFixedTime(new Date("2026-11-30T21:00:00Z"));
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute("data-season", "winter");
+  await expect(page.locator(".falling-leaves")).toHaveCount(0);
+  await expect(
+    page.locator('[data-snow-surface="heading"]').first(),
+  ).toHaveAttribute("data-snow-depth", "3");
+  await expect(page.locator(".snow-flurry").first()).toBeHidden();
+});
+
+test("snowflakes build caps on text and photos and follow their anchors", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/?season=winter", { waitUntil: "domcontentloaded" });
+  const snow = page.locator(".snowfall");
+  await expect(snow).toHaveCSS("pointer-events", "none");
+  await expect(snow).toHaveAttribute("aria-hidden", "true");
+  await expect(page.locator("html")).toHaveCSS("--season-pattern", "");
+
+  const heading = page.locator('[data-snow-surface="heading"]').first();
+  const photo = page.locator('[data-snow-surface="photo"]').first();
+  await expect(heading).toHaveAttribute("data-snow-depth", /^[1-4]$/);
+  await expect(photo).toHaveAttribute("data-snow-depth", /^[1-4]$/);
+  await expect(heading).toHaveAttribute("data-snow-depth", /^[2-4]$/);
+  await expect(photo).toHaveAttribute("data-snow-depth", /^[2-4]$/);
+  const before = (await heading.boundingBox())!.y;
+  await page.evaluate(() => window.scrollBy({ top: 74, behavior: "instant" }));
+  await expect
+    .poll(async () => (await heading.boundingBox())?.y ?? before)
+    .toBeLessThan(before - 60);
+  await expect(heading).toHaveAttribute("data-snow-depth", /^[2-4]$/);
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(page.locator(".snow-flurry").first()).toBeHidden();
+  await expect(heading).toHaveAttribute("data-snow-depth", "3");
+});

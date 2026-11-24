@@ -4,48 +4,19 @@ import {
   observeMutations,
 } from "../integrations/sectionRuntime";
 
-type Landing = { element: Element; kind: "heading" | "photo"; edge: number };
-const content = ":is(.bomond main, [data-bomond-island])";
-const landingSelectors = {
-  heading: content + " h1 span, " + content + " h2, " + content + " h3",
-  photo: content + " img",
-};
+import {
+  findSeasonalSurfaces,
+  firstTextLine,
+  type SeasonalSurface,
+} from "./seasonalSurfaces";
 
-function findLandings(height: number) {
-  const heroPhoto = document
-    .querySelector(content + " h1")
-    ?.closest("section")
-    ?.querySelector("img");
-  function visible(kind: Landing["kind"]) {
-    return Array.from(document.querySelectorAll(landingSelectors[kind])).filter(
-      (element) => {
-        const rect = element.getBoundingClientRect();
-        // The hero portrait may still be loading when the leaves first appear.
-        const hasHeight =
-          kind === "photo"
-            ? rect.height > 65 || element === heroPhoto
-            : rect.height > 9;
-        return (
-          hasHeight &&
-          rect.width > 36 &&
-          rect.top > 62 &&
-          rect.top < height - 8 &&
-          getComputedStyle(element).visibility === "visible"
-        );
-      },
-    );
-  }
-  return { heading: visible("heading"), photo: visible("photo") };
-}
-
+type Landing = { element: Element; kind: SeasonalSurface; edge: number };
 function landingPoint(landing: Landing, width: number) {
   const rect = landing.element.getBoundingClientRect();
   if (landing.kind === "photo") {
     return { x: rect.left + rect.width * landing.edge, y: rect.top + 5 };
   }
-  const text = document.createRange();
-  text.selectNodeContents(landing.element);
-  const line = text.getClientRects()[0] ?? rect;
+  const line = firstTextLine(landing.element);
   if (landing.edge < 0.5) {
     return { x: line.left + 3, y: line.top - 4 };
   }
@@ -135,7 +106,7 @@ export function animateLeaves(layer: HTMLElement) {
 
   function chooseLanding(
     leaf: Leaf,
-    surfaces: ReturnType<typeof findLandings>,
+    surfaces: ReturnType<typeof findSeasonalSurfaces>,
   ): Landing | undefined {
     const occupants = (element: Element) =>
       leaves.filter((other) => other.landing?.element === element).length;
@@ -169,7 +140,7 @@ export function animateLeaves(layer: HTMLElement) {
 
   function begin(
     leaf: Leaf,
-    surfaces: ReturnType<typeof findLandings>,
+    surfaces: ReturnType<typeof findSeasonalSurfaces>,
     skipEntrance = false,
   ) {
     clear(leaf);
@@ -217,7 +188,7 @@ export function animateLeaves(layer: HTMLElement) {
       leaf,
       leaf.index >= 6
         ? { heading: [], photo: [] }
-        : findLandings(layer.clientHeight),
+        : findSeasonalSurfaces(layer.clientHeight),
     );
   }
 
@@ -239,7 +210,7 @@ export function animateLeaves(layer: HTMLElement) {
   function start() {
     leaves.forEach(clear);
     if (!isAutumn() || document.hidden) return;
-    const surfaces = findLandings(layer.clientHeight);
+    const surfaces = findSeasonalSurfaces(layer.clientHeight);
     leaves.forEach((leaf) => begin(leaf, surfaces));
   }
 
@@ -259,7 +230,9 @@ export function animateLeaves(layer: HTMLElement) {
         );
       });
       outside.forEach(clear);
-      const surfaces = outside.length ? findLandings(height) : undefined;
+      const surfaces = outside.length
+        ? findSeasonalSurfaces(height)
+        : undefined;
       for (const leaf of leaves) {
         if (outside.includes(leaf)) begin(leaf, surfaces!, true);
         else if (leaf.element.dataset.leafPhase) position(leaf);
@@ -273,7 +246,7 @@ export function animateLeaves(layer: HTMLElement) {
     cancelScrollSettle?.();
     cancelScrollSettle = delay(() => {
       if (!isAutumn() || document.hidden) return;
-      const surfaces = findLandings(layer.clientHeight);
+      const surfaces = findSeasonalSurfaces(layer.clientHeight);
       for (const leaf of leaves) {
         if (
           !leaf.landing &&

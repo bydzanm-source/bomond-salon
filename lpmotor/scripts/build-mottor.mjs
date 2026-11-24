@@ -84,13 +84,14 @@ const css = (name) =>
 // Use distinct family names so LPmotor's built-in font faces cannot load too.
 const useBomondFonts = (styles) =>
   styles.replace(/"(Manrope|EB Garamond)"/g, '"Bomond $1"');
-const [tokens, ambientTokens, ambient, booking, leaves, fonts, index] =
+const [tokens, ambientTokens, ambient, booking, leaves, snow, fonts, index] =
   await Promise.all([
     css("tokens"),
     css("ambient-tokens"),
     css("ambient"),
     css("booking"),
     css("leaves"),
+    css("snow"),
     css("fonts"),
     readFile(new URL("index.html", project), "utf8"),
   ]);
@@ -118,10 +119,14 @@ if (pageHead.length > 4000)
   throw new Error("LPmotor site head exceeds its limit.");
 
 const floatingCss = (
-  await transformWithEsbuild(useBomondFonts(booking + leaves), "floating.css", {
-    loader: "css",
-    minify: true,
-  })
+  await transformWithEsbuild(
+    useBomondFonts(booking + leaves + snow),
+    "floating.css",
+    {
+      loader: "css",
+      minify: true,
+    },
+  )
 ).code;
 const pageBody =
   '<div id="bomond-floating-root"></div><style>' + floatingCss + "</style>";
