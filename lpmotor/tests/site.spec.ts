@@ -151,18 +151,53 @@ test("November promotion shows the terms and keeps the referral offer", async ({
     promo.getByRole("heading", { name: "Ноябрь в Bomond" }),
   ).toBeVisible();
   await expect(promo.getByText("До 30 ноября включительно")).toBeVisible();
-  await expect(
-    promo.getByText("При окрашивании у Лины или Алёны."),
-  ).toBeVisible();
-  await expect(
-    promo.getByRole("listitem").filter({ hasText: "Ботокс волос у Кристины" }),
-  ).toContainText("−15%");
-  await expect(
-    promo.getByRole("listitem").filter({ hasText: "Наращивание ресниц" }),
-  ).toContainText("−10%");
-  await expect(
-    promo.getByRole("listitem").filter({ hasText: "Мужские стрижки у Марии" }),
-  ).toContainText("−10%");
+  const cards = promo.locator(".promotions-offers").getByRole("listitem");
+  await expect(cards).toHaveCount(4);
+  const photos = new Set<string>();
+  for (const [title, benefit, detail, alt] of [
+    [
+      "Ампульное восстановление волос",
+      "В подарок",
+      "При окрашивании у Лины или Алёны.",
+      "Мастер наносит ампульный уход на пряди волос",
+    ],
+    [
+      "Ботокс для волос",
+      "−15%",
+      "У Кристины",
+      "Гладкие светлые волосы после ботокса",
+    ],
+    [
+      "Наращивание ресниц",
+      "−10%",
+      "",
+      "Крупный план классического наращивания ресниц",
+    ],
+    [
+      "Мужские стрижки",
+      "−10%",
+      "У Марии",
+      "Мастер стрижёт короткие мужские волосы ножницами",
+    ],
+  ]) {
+    const card = cards.filter({
+      has: page.getByRole("heading", { name: title, exact: true }),
+    });
+    await expect(card).toContainText(benefit);
+    if (detail) await expect(card).toContainText(detail);
+    const photo = card.getByRole("img", { name: alt, exact: true });
+    await photo.scrollIntoViewIfNeeded();
+    await expect(photo).toBeVisible();
+    await expect
+      .poll(() =>
+        photo.evaluate((image: HTMLImageElement) => image.naturalWidth),
+      )
+      .toBeGreaterThan(0);
+    photos.add(
+      await photo.evaluate((image: HTMLImageElement) => image.currentSrc),
+    );
+  }
+  expect(photos.size).toBe(4);
   await expect(
     promo.getByRole("link", { name: "Записаться по акции" }),
   ).toHaveAttribute("href", "https://dikidi.net/500351");

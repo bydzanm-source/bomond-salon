@@ -2,72 +2,96 @@ import { AmbientBackdrop } from "../shared/AmbientBackdrop";
 import { studio } from "../content/studio";
 import "../styles/promotions.css";
 
+const novemberOffers = [
+  {
+    title: "Ампульное восстановление волос",
+    benefit: "В подарок",
+    detail: "При окрашивании у Лины или Алёны.",
+    photo:
+      "https://m-files.cdn1.cc/lpfile/5/e/6/5e699ebd180f11d0f6da23e1dc82e618/-/crop/36x205x120x122/f.jpg",
+    alt: "Мастер наносит ампульный уход на пряди волос",
+  },
+  {
+    title: "Ботокс для волос",
+    benefit: "−15%",
+    detail: "У Кристины",
+    photo:
+      "https://m-files.cdn1.cc/lpfile/e/d/9/ed9b697868a1ec937ea44003db9a2d55.jpeg",
+    alt: "Гладкие светлые волосы после ботокса",
+  },
+  {
+    title: "Наращивание ресниц",
+    benefit: "−10%",
+    detail: null,
+    photo:
+      "https://m-files.cdn1.cc/lpfile/3/d/3/3d3220c821361eb074c6930fd3efe43d.jpeg",
+    alt: "Крупный план классического наращивания ресниц",
+  },
+  {
+    title: "Мужские стрижки",
+    benefit: "−10%",
+    detail: "У Марии",
+    photo:
+      "https://m-files.cdn1.cc/lpfile/5/e/6/5e699ebd180f11d0f6da23e1dc82e618/-/crop/250x593x166x166/f.jpg",
+    alt: "Мастер стрижёт короткие мужские волосы ножницами",
+  },
+] as const;
+
 export function Promotions() {
   return (
     <section className="promotions-promo" id="promo">
       <AmbientBackdrop className="promotions-aurora" />
       <div className="promotions-wrap">
         <div className="promotions-featured">
-          <div className="promotions-featured-text">
-            <p className="promotions-period">
-              <time dateTime="2026-11-30">До 30 ноября включительно</time>
-            </p>
-            <h2 className="promotions-title">Ноябрь в Bomond</h2>
+          <p className="promotions-period">
+            <time dateTime="2026-11-30">До 30 ноября включительно</time>
+          </p>
+          <h2 className="promotions-title">Ноябрь в Bomond</h2>
 
-            <div className="promotions-gift">
-              <p className="promotions-gift-label">Подарок к окрашиванию</p>
-              <h3>Ампульное восстановление волос</h3>
-              <p>При окрашивании у Лины или Алёны.</p>
-            </div>
+          <ul className="promotions-offers" role="list">
+            {novemberOffers.map(
+              ({ title, benefit, detail, photo, alt }, index) => (
+                <li
+                  className={
+                    index === 0
+                      ? "promotions-offer promotions-offer--gift"
+                      : "promotions-offer"
+                  }
+                  key={title}
+                >
+                  <div className="promotions-offer-media">
+                    <img src={photo} alt={alt} loading="lazy" />
+                  </div>
+                  <div className="promotions-offer-copy">
+                    <p className="promotions-offer-value">{benefit}</p>
+                    <h3>{title}</h3>
+                    {detail && (
+                      <p className="promotions-offer-detail">{detail}</p>
+                    )}
+                  </div>
+                </li>
+              ),
+            )}
+          </ul>
 
-            <ul className="promotions-offers">
-              <li>
-                <span className="promotions-offer-value">−15%</span>
-                <span>Ботокс волос у Кристины</span>
-              </li>
-              <li>
-                <span className="promotions-offer-value">−10%</span>
-                <span>Наращивание ресниц</span>
-              </li>
-              <li>
-                <span className="promotions-offer-value">−10%</span>
-                <span>Мужские стрижки у Марии</span>
-              </li>
-            </ul>
-
-            <div className="promotions-actions">
-              <a
-                href="https://dikidi.net/500351"
-                target="_blank"
-                rel="noopener"
-                className="promotions-btn promotions-btn--primary"
-              >
-                Записаться по акции
-              </a>
-              <a
-                href="https://t.me/bomondblh/422"
-                target="_blank"
-                rel="noopener"
-                className="promotions-offer-source"
-              >
-                Акция в Telegram
-              </a>
-            </div>
+          <div className="promotions-actions">
+            <a
+              href="https://dikidi.net/500351"
+              target="_blank"
+              rel="noopener"
+              className="promotions-btn promotions-btn--primary"
+            >
+              Записаться по акции
+            </a>
+            <a
+              href="https://t.me/bomondblh/422"
+              target="_blank"
+              rel="noopener"
+              className="promotions-offer-source"
+            >
+              Акция в Telegram
+            </a>
           </div>
-
-          <figure className="promotions-featured-media">
-            <div className="promotions-photo-frame">
-              <img
-                className="promotions-photo"
-                src="https://m-files.cdn1.cc/lpfile/e/8/6/e867911644bec23dd4fe9af0cf1870fb.jpeg"
-                alt="Медное окрашивание и укладка в Bomond"
-                width="420"
-                height="525"
-                loading="lazy"
-              />
-            </div>
-            <figcaption>Окрашивание в Bomond</figcaption>
-          </figure>
         </div>
 
         <div className="promotions-referral promotions-reveal" id="referral">
