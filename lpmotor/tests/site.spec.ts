@@ -212,16 +212,54 @@ test("November promotion shows the terms and keeps the referral offer", async ({
   ).toBeVisible();
 });
 
-test("autumn leaves move only with motion enabled", async ({ page }) => {
+test("autumn leaves settle, lift in a gust and respect reduced motion", async ({
+  page,
+}) => {
   await page.goto("/?season=autumn", { waitUntil: "domcontentloaded" });
   const leaves = page.locator(".falling-leaves");
-  const leaf = leaves.locator("span").first();
+  const maple = leaves.locator('[data-leaf="maple"]');
+  const ginkgo = leaves.locator('[data-leaf="ginkgo"]');
   await expect(leaves).toHaveAttribute("aria-hidden", "true");
-  await expect(leaf).toBeVisible();
-  await expect(leaf).toHaveCSS("animation-name", "none");
+  await expect(leaves).toHaveCSS("pointer-events", "none");
+  await expect(leaves.locator("img")).toHaveCount(6);
+  await expect(maple).toHaveAttribute("data-leaf-phase", "still");
 
   await page.emulateMedia({ reducedMotion: "no-preference" });
-  await expect(leaf).toHaveCSS("animation-name", "leaf-descent");
+  await expect(maple).toHaveAttribute("data-leaf-phase", "falling");
+  await expect(maple).toHaveAttribute("data-leaf-surface", "heading");
+  await expect(ginkgo).toHaveAttribute("data-leaf-surface", "photo");
+  await expect(maple).toHaveAttribute("data-leaf-phase", "resting");
+  await expect(ginkgo).toHaveAttribute("data-leaf-phase", "resting");
+
+  const heading = await page.locator(".hero-brand").boundingBox();
+  const mapleBounds = await maple.locator("img").boundingBox();
+  const photo = await page.locator(".hero-photo").boundingBox();
+  const ginkgoBounds = await ginkgo.locator("img").boundingBox();
+  expect(heading && mapleBounds && photo && ginkgoBounds).toBeTruthy();
+  expect(Math.abs(heading!.y - mapleBounds!.y)).toBeLessThan(40);
+  expect(Math.abs(photo!.y - ginkgoBounds!.y)).toBeLessThan(40);
+
+  await page.evaluate(() => window.scrollBy({ top: 70, behavior: "instant" }));
+  await expect
+    .poll(async () => Math.round((await maple.boundingBox())!.y))
+    .toBeLessThan(Math.round(mapleBounds!.y) - 30);
+  const restingY = (await ginkgo.boundingBox())!.y;
+  await expect(ginkgo).toHaveAttribute("data-leaf-phase", "gust", {
+    timeout: 7000,
+  });
+  await expect
+    .poll(async () => (await ginkgo.boundingBox())?.y ?? restingY)
+    .toBeLessThan(restingY - 28);
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(maple).toHaveAttribute("data-leaf-phase", "still");
+  await expect
+    .poll(() =>
+      leaves.evaluate(
+        (element) => element.getAnimations({ subtree: true }).length,
+      ),
+    )
+    .toBe(0);
   await page.goto("/?season=winter", { waitUntil: "domcontentloaded" });
   await expect(page.locator("html")).toHaveAttribute("data-season", "winter");
   await expect(leaves).toBeHidden();
