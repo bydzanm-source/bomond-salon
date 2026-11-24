@@ -1,3 +1,5 @@
+@import "./ambient-tokens.css";
+
 [data-ambient-backdrop][data-ambient-backdrop] {
   opacity: 1;
   overflow: hidden;
@@ -28,66 +30,6 @@
 [data-ambient-backdrop][data-motion-visible]::before,
 [data-ambient-backdrop][data-motion-visible]::after {
   animation-play-state: running;
-}
-
-:root {
-  --ambient-violet: rgb(139 95 160 / 13%);
-  --ambient-gold: rgb(169 129 63 / 12%);
-  --ambient-rose: rgb(214 140 160 / 9%);
-}
-
-html[data-theme="dark"] {
-  --ambient-violet: rgb(211 164 220 / 11%);
-  --ambient-gold: rgb(220 181 114 / 11%);
-  --ambient-rose: rgb(214 120 150 / 9%);
-}
-
-html[data-season="winter"] {
-  --season-pattern:
-    radial-gradient(
-      circle at 20% 25%,
-      rgb(190 210 225 / 44%) 0 2px,
-      transparent 3px
-    ),
-    radial-gradient(
-      circle at 69% 67%,
-      rgb(220 230 240 / 48%) 0 1px,
-      transparent 2px
-    );
-}
-
-html[data-season="spring"] {
-  --season-pattern:
-    radial-gradient(
-      ellipse 2px 4px at 20% 25%,
-      rgb(215 130 161 / 24%) 97%,
-      transparent
-    ),
-    radial-gradient(
-      ellipse 4px 2px at 69% 67%,
-      rgb(215 130 161 / 20%) 97%,
-      transparent
-    );
-}
-
-html[data-season="summer"] {
-  --season-pattern:
-    radial-gradient(circle at 20% 25%, rgb(218 170 93 / 15%), transparent 10%),
-    radial-gradient(circle at 69% 67%, rgb(237 204 128 / 13%), transparent 9%);
-}
-
-html[data-season="autumn"] {
-  --season-pattern:
-    radial-gradient(
-      ellipse 2px 5px at 20% 25%,
-      rgb(169 96 42 / 28%) 97%,
-      transparent
-    ),
-    radial-gradient(
-      ellipse 5px 2px at 69% 67%,
-      rgb(202 133 58 / 25%) 97%,
-      transparent
-    );
 }
 
 @keyframes ambient-drift {

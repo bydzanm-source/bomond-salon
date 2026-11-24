@@ -81,20 +81,33 @@ await build({
 const { renderSections } = await import(new URL("mottor-server.js", output));
 const css = (name) =>
   readFile(new URL("src/styles/" + name + ".css", project), "utf8");
-const [tokens, ambient, booking, fonts, index] = await Promise.all([
-  css("tokens"),
-  css("ambient"),
-  css("booking"),
-  css("fonts"),
-  readFile(new URL("index.html", project), "utf8"),
-]);
-const pageHead = index.match(
+const [tokens, ambientTokens, ambient, booking, fonts, index] =
+  await Promise.all([
+    css("tokens"),
+    css("ambient-tokens"),
+    css("ambient"),
+    css("booking"),
+    css("fonts"),
+    readFile(new URL("index.html", project), "utf8"),
+  ]);
+const headScripts = index.match(
   /<script\b[\s\S]+?<\/script>\s*<script\b[\s\S]+?<\/script>/,
 )?.[0];
-if (!pageHead)
+if (!headScripts)
   throw new Error(
     "The site template is missing the Telegram and theme scripts.",
   );
+
+// LPmotor nests section rules under a block ID, so theme variables belong in the site head.
+const sharedCss = (
+  await transformWithEsbuild(tokens + ambientTokens, "shared.css", {
+    loader: "css",
+    minify: true,
+  })
+).code;
+const pageHead = headScripts + "<style>" + sharedCss + "</style>";
+if (pageHead.length > 4000)
+  throw new Error("LPmotor site head exceeds its limit.");
 
 const bookingCss = (
   await transformWithEsbuild(booking, "booking.css", {
@@ -133,30 +146,16 @@ const sections = await Promise.all(
       /(^|,)\s*::view-transition/gm,
       "$1 html:has(." + prefix + "-island)::view-transition",
     );
-    const scopedTokens =
-      name === "header"
-        ? tokens
-            .replace(/:root/g, "html:has(.bnav-island)")
-            .replace(
-              /html\[data-theme="dark"\]/g,
-              'html[data-theme="dark"]:has(.bnav-island)',
-            )
-        : "";
     const scopedAmbient = !html.includes("data-ambient-backdrop")
       ? ""
       : ambient
-          .replaceAll("[data-ambient-backdrop]", "." + prefix + "-aurora")
-          .replace(/:root/g, "html:has(." + prefix + "-island)")
-          .replace(
-            /html\[data-(theme|season)="([^"]+)"\]/g,
-            'html[data-$1="$2"]:has(.' + prefix + "-island)",
-          );
+          .replace('@import "./ambient-tokens.css";', "")
+          .replaceAll("[data-ambient-backdrop]", "." + prefix + "-aurora");
     const sectionCss = (
-      await transformWithEsbuild(
-        scopedTokens + style + scopedAmbient,
-        name + ".css",
-        { loader: "css", minify: true },
-      )
+      await transformWithEsbuild(style + scopedAmbient, name + ".css", {
+        loader: "css",
+        minify: true,
+      })
     ).code;
 
     if (

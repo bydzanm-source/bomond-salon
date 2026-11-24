@@ -36,6 +36,14 @@ test("navigation, price tabs, reviews, persistent theme and booking", async ({
     "Входите в BOMOND",
   );
   await expect(page.locator(".hero-photo")).toBeVisible();
+  await expect(page.locator(".header-header")).toHaveCSS(
+    "background-color",
+    "rgb(250, 246, 241)",
+  );
+  await expect(page.locator(".hero-btn--primary")).toHaveCSS(
+    "background-color",
+    "rgb(184, 121, 79)",
+  );
 
   if (isMobile) {
     const menu = page.getByRole("button", { name: "Меню" });
@@ -80,6 +88,10 @@ test("navigation, price tabs, reviews, persistent theme and booking", async ({
   const theme = page.getByRole("switch", { name: "Переключить тёмную тему" });
   await theme.click();
   await expect(theme).toHaveAttribute("aria-checked", "true");
+  await expect(page.locator(".header-header")).toHaveCSS(
+    "background-color",
+    "rgb(23, 18, 15)",
+  );
   await page.reload({ waitUntil: "domcontentloaded" });
   await expect(theme).toHaveAttribute("aria-checked", "true");
   await expect(
