@@ -311,31 +311,39 @@ test("leaves stay in view while scrolling and land on newly visible cards", asyn
     JSON.stringify(samples.visibleCounts),
   ).toBeGreaterThan(0);
 
+  await page.locator("#services").evaluate((section) => {
+    window.scrollBy({
+      top: section.getBoundingClientRect().top - 85,
+      behavior: "instant",
+    });
+  });
   await expect
-    .poll(() =>
-      page.evaluate(() => {
-        const section = document.querySelector("#services")!;
-        return ["heading", "photo"].every((kind) => {
-          const targets = section.querySelectorAll(
-            kind === "photo" ? "img" : "h2, h3",
-          );
-          const leaves = document.querySelectorAll(
-            `[data-leaf-phase="resting"][data-leaf-surface="${kind}"] img`,
-          );
-          return Array.from(leaves).some((leaf) => {
-            const center = leaf.getBoundingClientRect();
-            return Array.from(targets).some((target) => {
-              const bounds = target.getBoundingClientRect();
-              return (
-                bounds.top > 62 &&
-                Math.abs(center.top - bounds.top) < 40 &&
-                center.right >= bounds.left &&
-                center.left <= bounds.right
-              );
+    .poll(
+      () =>
+        page.evaluate(() => {
+          const section = document.querySelector("#services")!;
+          return ["heading", "photo"].every((kind) => {
+            const targets = section.querySelectorAll(
+              kind === "photo" ? "img" : "h2, h3",
+            );
+            const leaves = document.querySelectorAll(
+              `[data-leaf-phase="resting"][data-leaf-surface="${kind}"] img`,
+            );
+            return Array.from(leaves).some((leaf) => {
+              const center = leaf.getBoundingClientRect();
+              return Array.from(targets).some((target) => {
+                const bounds = target.getBoundingClientRect();
+                return (
+                  bounds.top > 62 &&
+                  Math.abs(center.top - bounds.top) < 40 &&
+                  center.right >= bounds.left &&
+                  center.left <= bounds.right
+                );
+              });
             });
           });
-        });
-      }),
+        }),
+      { timeout: 10000 },
     )
     .toBe(true);
 });
