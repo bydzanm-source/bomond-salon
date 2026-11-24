@@ -353,13 +353,15 @@ test("leaves stay in view while scrolling and land on newly visible cards", asyn
     .toBe(true);
 });
 
-test("winter begins at Moscow midnight on December 1", async ({ page }) => {
-  await page.clock.setFixedTime(new Date("2026-11-30T20:59:59Z"));
+test("winter is active from November 24 through February in Moscow", async ({
+  page,
+}) => {
+  await page.clock.setFixedTime(new Date("2026-11-23T20:59:59Z"));
   await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page.locator("html")).toHaveAttribute("data-season", "autumn");
   await expect(page.locator(".snowfall")).toHaveCount(0);
 
-  await page.clock.setFixedTime(new Date("2026-11-30T21:00:00Z"));
+  await page.clock.setFixedTime(new Date("2026-11-23T21:00:00Z"));
   await page.reload({ waitUntil: "domcontentloaded" });
   await expect(page.locator("html")).toHaveAttribute("data-season", "winter");
   await expect(page.locator(".falling-leaves")).toHaveCount(0);
@@ -367,6 +369,15 @@ test("winter begins at Moscow midnight on December 1", async ({ page }) => {
     page.locator('[data-snow-surface="heading"]').first(),
   ).toHaveAttribute("data-snow-depth", "3");
   await expect(page.locator(".snow-flurry").first()).toBeHidden();
+
+  await page.clock.setFixedTime(new Date("2027-02-28T20:59:59Z"));
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute("data-season", "winter");
+
+  await page.clock.setFixedTime(new Date("2027-02-28T21:00:00Z"));
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute("data-season", "spring");
+  await expect(page.locator(".snowfall")).toHaveCount(0);
 });
 
 test("snowflakes build caps on text and photos and follow their anchors", async ({
