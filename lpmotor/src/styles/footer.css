@@ -193,9 +193,3 @@
     color-scheme: dark;
   }
 }
-
-@media (max-width: 520px) {
-  .footer-brand {
-    min-width: 0;
-  }
-}

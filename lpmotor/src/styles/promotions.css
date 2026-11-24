@@ -570,17 +570,3 @@
     color-scheme: dark;
   }
 }
-
-@media (max-width: 520px) {
-  .promotions-ref-text,
-  .promotions-ref-media {
-    min-width: 0;
-    max-width: 100%;
-  }
-  .promotions-offer h3 {
-    overflow-wrap: anywhere;
-  }
-  .promotions-offer-copy {
-    padding-inline: 10px;
-  }
-}

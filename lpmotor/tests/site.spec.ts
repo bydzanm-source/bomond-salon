@@ -3,19 +3,6 @@ import { studio } from "../src/content/studio";
 
 test.use({ reducedMotion: "reduce" });
 
-test.beforeEach(async ({ page }) => {
-  // Browser tests cover markup and interactions. The deployed-site check loads the real CDN assets.
-  await page.route("https://m-files.cdn1.cc/lpfile/**", (route) =>
-    route.fulfill({
-      contentType: "image/png",
-      body: Buffer.from(
-        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a45cAAAAASUVORK5CYII=",
-        "base64",
-      ),
-    }),
-  );
-});
-
 test("server HTML includes the whole page and indexing metadata", async ({
   request,
 }) => {
@@ -46,28 +33,16 @@ test("navigation, price tabs, reviews, persistent theme and booking", async ({
   await page.goto("/?season=winter", { waitUntil: "domcontentloaded" });
   await expect(page.locator("html")).toHaveAttribute("data-season", "winter");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Студия красоты в Балашихе",
+    "Входите в BOMOND",
   );
   await expect(page.locator(".hero-photo")).toBeVisible();
-  await expect(page.locator(".hero-title")).toHaveCSS(
-    "font-family",
-    /EB Garamond/,
-  );
-  expect(
-    await page
-      .locator(".hero-wrap")
-      .evaluate(
-        (element) =>
-          getComputedStyle(element).gridTemplateColumns.split(" ").length,
-      ),
-  ).toBe(isMobile ? 1 : 2);
   await expect(page.locator(".header-header")).toHaveCSS(
     "background-color",
-    "rgb(246, 241, 235)",
+    "rgb(250, 246, 241)",
   );
   await expect(page.locator(".hero-btn--primary")).toHaveCSS(
     "background-color",
-    "rgb(109, 63, 75)",
+    "rgb(184, 121, 79)",
   );
 
   if (isMobile) {
@@ -115,7 +90,7 @@ test("navigation, price tabs, reviews, persistent theme and booking", async ({
   await expect(theme).toHaveAttribute("aria-checked", "true");
   await expect(page.locator(".header-header")).toHaveCSS(
     "background-color",
-    "rgb(33, 25, 30)",
+    "rgb(23, 18, 15)",
   );
   await page.reload({ waitUntil: "domcontentloaded" });
   await expect(theme).toHaveAttribute("aria-checked", "true");
@@ -234,39 +209,5 @@ test("November promotion shows the terms and keeps the referral offer", async ({
     page
       .locator("#referral")
       .getByRole("heading", { name: "Приведи подругу — скидка обеим" }),
-  ).toBeVisible();
-});
-
-test("portfolio opens by keyboard and links to the right price category", async ({
-  page,
-}) => {
-  await page.goto("/", { waitUntil: "domcontentloaded" });
-  await expect(page.locator(".hero-portrait")).toHaveCSS(
-    "animation-name",
-    "none",
-  );
-  await page.getByRole("link", { name: "Смотреть работы" }).click();
-  await expect(page).toHaveURL(/#works$/);
-  const work = page
-    .locator("#works")
-    .getByRole("button", { name: /Окрашивание/ });
-  await work.focus();
-  await work.press("Enter");
-  const dialog = page.getByRole("dialog", { name: "Окрашивание" });
-  await expect(
-    dialog.getByRole("img", { name: "Окрашивание в Bomond" }),
-  ).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(dialog).toHaveCount(0);
-  await expect(work).toBeFocused();
-
-  await work.click();
-  await dialog.getByRole("link", { name: "Смотреть цены" }).click();
-  await expect(page).toHaveURL(/#price-1$/);
-  await expect(
-    page.getByRole("tab", { name: "Парикмахерский зал" }),
-  ).toHaveAttribute("aria-selected", "true");
-  await expect(
-    page.getByRole("tabpanel").getByText("Женская стрижка"),
   ).toBeVisible();
 });

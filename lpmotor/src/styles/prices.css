@@ -332,23 +332,3 @@
   color: var(--color-ink);
   margin: 36px 0 12px;
 }
-
-.prices-booking {
-  margin-top: 22px;
-}
-.prices-booking a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 46px;
-  padding: 0 16px;
-  border-radius: 8px;
-  background: var(--color-accent);
-  color: var(--color-on-accent);
-  font:
-    750 14px / 1.4 "Manrope",
-    sans-serif;
-  text-decoration: none;
-}
-.prices-booking a:hover {
-  background: var(--color-accent-hover);
-}

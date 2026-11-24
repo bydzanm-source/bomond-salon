@@ -26,8 +26,13 @@ export function FloatingBooking() {
       aria-hidden={!visible}
       aria-label="Онлайн-запись"
     >
-      <span>Онлайн-запись</span>
-      <span aria-hidden="true">↗</span>
+      <span aria-hidden="true" className="booking-ring" />
+      <span aria-hidden="true" className="booking-ring" />
+      <span className="booking-caption">
+        Онлайн
+        <br />
+        запись
+      </span>
     </a>
   );
 }
