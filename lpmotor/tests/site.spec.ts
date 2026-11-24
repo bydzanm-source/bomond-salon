@@ -140,7 +140,7 @@ test("contacts show both courtyard approaches and open the interactive map", asy
   await expect(mapButton).toHaveAttribute("aria-pressed", "true");
   await expect(contacts.locator("iframe")).toHaveAttribute(
     "src",
-    /37\.93238849%2C55\.79491018.*&z=18$/,
+    /mode=routes&rtext=~55\.79491018,37\.93238849&rtt=pd.*&z=18$/,
   );
   await contacts.getByRole("button", { name: "Схема проезда" }).click();
   await expect(contacts.locator("iframe")).toHaveCount(0);

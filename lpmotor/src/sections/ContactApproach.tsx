@@ -1,3 +1,12 @@
+import { studio } from "../content/studio";
+
+const entranceX = Math.round(
+  ((studio.courtyardEntrance.longitude - 37.9295) / 0.0053) * 620,
+);
+const entranceY = Math.round(
+  ((55.79612 - studio.courtyardEntrance.latitude) / 0.002) * 420,
+);
+
 export function ContactApproach() {
   return (
     <figure className="contacts-approach">
@@ -98,7 +107,7 @@ export function ContactApproach() {
           markerEnd="url(#contacts-arrow-arch)"
         />
         <path
-          d="M338 231v23"
+          d={`M${entranceX} 231V${entranceY}`}
           fill="none"
           stroke="#574832"
           strokeWidth="3"
@@ -106,8 +115,8 @@ export function ContactApproach() {
           strokeDasharray="2 5"
         />
         <circle
-          cx="338"
-          cy="254"
+          cx={entranceX}
+          cy={entranceY}
           r="8"
           fill="#4e2d21"
           stroke="#fffdfa"

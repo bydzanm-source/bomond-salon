@@ -139,7 +139,7 @@ export function Contacts() {
                 <span className="contacts-map-brand">Bomond</span>
                 <a
                   className="contacts-map-address"
-                  href={studio.yandex}
+                  href={studio.directions}
                   target="_blank"
                   rel="noopener"
                 >
