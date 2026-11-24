@@ -227,43 +227,43 @@
 @media (max-width: 800px) {
   .services-heading,
   .services-portfolio-head {
-    display: grid;
+    display: grid !important;
   }
   .services-grid,
   .services-works {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
   .services-card:last-child {
-    grid-column: span 2;
-    grid-template-columns: 1fr 1fr;
+    grid-column: span 2 !important;
+    grid-template-columns: 1fr 1fr !important;
   }
 }
 @media (max-width: 500px) {
   .services-wrap {
-    padding-inline: 16px;
+    padding-inline: 16px !important;
   }
   .services-grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 10px;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 10px !important;
   }
   .services-card,
   .services-card:last-child {
-    grid-column: auto;
-    display: grid;
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    grid-column: auto !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr) !important;
   }
   .services-media {
-    position: relative;
-    aspect-ratio: auto;
+    position: relative !important;
+    aspect-ratio: auto !important;
   }
   .services-photo {
-    position: absolute;
-    inset: 0;
+    position: absolute !important;
+    inset: 0 !important;
   }
   .services-card-copy {
-    padding: 13px;
+    padding: 13px !important;
   }
   .services-text {
-    font-size: 12px;
+    font-size: 12px !important;
   }
 }

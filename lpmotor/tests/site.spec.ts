@@ -49,6 +49,18 @@ test("navigation, price tabs, reviews, persistent theme and booking", async ({
     "Студия красоты в Балашихе",
   );
   await expect(page.locator(".hero-photo")).toBeVisible();
+  await expect(page.locator(".hero-title")).toHaveCSS(
+    "font-family",
+    /EB Garamond/,
+  );
+  expect(
+    await page
+      .locator(".hero-wrap")
+      .evaluate(
+        (element) =>
+          getComputedStyle(element).gridTemplateColumns.split(" ").length,
+      ),
+  ).toBe(isMobile ? 1 : 2);
   await expect(page.locator(".header-header")).toHaveCSS(
     "background-color",
     "rgb(246, 241, 235)",

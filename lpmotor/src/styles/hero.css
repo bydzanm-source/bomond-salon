@@ -35,9 +35,10 @@
 .hero-title {
   margin: 0;
   color: var(--color-ink);
-  font:
-    500 clamp(54px, 7vw, 104px) / 0.91 "EB Garamond",
-    serif;
+  font-family: "EB Garamond", serif !important;
+  font-weight: 500;
+  font-size: clamp(54px, 7vw, 104px);
+  line-height: 0.91;
   letter-spacing: -0.049em;
 }
 .hero-title em {
@@ -175,26 +176,25 @@
 }
 @media (max-width: 720px) {
   .hero-wrap {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 32px;
-    padding: 44px 20px 34px;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 32px !important;
+    padding: 44px 20px 34px !important;
   }
   .hero-title {
-    font-size: clamp(46px, 11vw, 70px);
+    font-size: clamp(46px, 11vw, 70px) !important;
   }
   .hero-portrait {
-    aspect-ratio: 7 / 6;
-    object-position: center top;
+    aspect-ratio: 7 / 6 !important;
   }
   .hero-photo {
-    object-position: center 28%;
+    object-position: center 28% !important;
   }
 }
 @media (max-width: 380px) {
   .hero-notes {
-    gap: 12px;
+    gap: 12px !important;
   }
   .hero-btn {
-    padding-inline: 12px;
+    padding-inline: 12px !important;
   }
 }
