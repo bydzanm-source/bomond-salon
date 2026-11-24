@@ -9,6 +9,7 @@ import { animateLeaves } from "./leafMotion";
 import "../styles/leaves.css";
 
 const leaves = { maple, ginkgo, oak, birch, beech, sweetgum };
+const driftingLeaves = { "oak-drift": oak, "sweetgum-drift": sweetgum };
 
 export function FallingLeaves() {
   const layer = useRef<HTMLDivElement>(null);
@@ -19,7 +20,7 @@ export function FallingLeaves() {
 
   return (
     <div ref={layer} className="falling-leaves" aria-hidden="true">
-      {Object.entries(leaves).map(([kind, image]) => (
+      {Object.entries({ ...leaves, ...driftingLeaves }).map(([kind, image]) => (
         <span key={kind} data-leaf={kind}>
           <img src={image} alt="" decoding="async" draggable={false} />
         </span>

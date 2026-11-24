@@ -221,7 +221,8 @@ test("autumn leaves settle, lift in a gust and respect reduced motion", async ({
   const ginkgo = leaves.locator('[data-leaf="ginkgo"]');
   await expect(leaves).toHaveAttribute("aria-hidden", "true");
   await expect(leaves).toHaveCSS("pointer-events", "none");
-  await expect(leaves.locator("img")).toHaveCount(6);
+  await expect(leaves.locator("img")).toHaveCount(8);
+  await expect(page.locator("html")).toHaveCSS("--season-pattern", "");
   await expect(maple).toHaveAttribute("data-leaf-phase", "still");
 
   await page.emulateMedia({ reducedMotion: "no-preference" });
@@ -263,4 +264,78 @@ test("autumn leaves settle, lift in a gust and respect reduced motion", async ({
   await page.goto("/?season=winter", { waitUntil: "domcontentloaded" });
   await expect(page.locator("html")).toHaveAttribute("data-season", "winter");
   await expect(leaves).toBeHidden();
+});
+
+test("leaves stay in view while scrolling and land on newly visible cards", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/?season=autumn", { waitUntil: "domcontentloaded" });
+  await expect(page.locator('[data-leaf="oak-drift"]')).toHaveAttribute(
+    "data-leaf-phase",
+    "falling",
+  );
+
+  const samples = await page.evaluate(async () => {
+    const layer = document.querySelector(".falling-leaves")!;
+    const leaves = Array.from(layer.querySelectorAll('[data-leaf$="-drift"]'));
+    const flights = leaves.map((leaf) => leaf.getAnimations()[0]);
+    const section = document.querySelector("#services")!;
+    const destination =
+      window.scrollY + section.getBoundingClientRect().top - 85;
+    const visibleCounts = [];
+    for (let step = 1; step <= 20; step++) {
+      window.scrollTo({ top: (destination * step) / 20, behavior: "instant" });
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+      visibleCounts.push(
+        leaves.filter((leaf) => {
+          const rect = leaf.querySelector("img")!.getBoundingClientRect();
+          return (
+            rect.top > 72 &&
+            rect.bottom < window.innerHeight &&
+            Number(getComputedStyle(leaf).opacity) > 0.35
+          );
+        }).length,
+      );
+    }
+    return {
+      visibleCounts,
+      sameFlights: leaves.every(
+        (leaf, index) => leaf.getAnimations()[0] === flights[index],
+      ),
+    };
+  });
+  expect(samples.sameFlights).toBe(true);
+  expect(
+    Math.min(...samples.visibleCounts),
+    JSON.stringify(samples.visibleCounts),
+  ).toBeGreaterThan(0);
+
+  await expect
+    .poll(() =>
+      page.evaluate(() => {
+        const section = document.querySelector("#services")!;
+        return ["heading", "photo"].every((kind) => {
+          const targets = section.querySelectorAll(
+            kind === "photo" ? "img" : "h2, h3",
+          );
+          const leaves = document.querySelectorAll(
+            `[data-leaf-phase="resting"][data-leaf-surface="${kind}"] img`,
+          );
+          return Array.from(leaves).some((leaf) => {
+            const center = leaf.getBoundingClientRect();
+            return Array.from(targets).some((target) => {
+              const bounds = target.getBoundingClientRect();
+              return (
+                bounds.top > 62 &&
+                Math.abs(center.top - bounds.top) < 40 &&
+                center.right >= bounds.left &&
+                center.left <= bounds.right
+              );
+            });
+          });
+        });
+      }),
+    )
+    .toBe(true);
 });
