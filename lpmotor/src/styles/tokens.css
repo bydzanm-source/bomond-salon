@@ -1,0 +1,19 @@
+:root {
+  --color-ink: #2b241f;
+  --color-muted: #7a6f66;
+  --color-border: #e6dad0;
+  --color-accent: #b8794f;
+  --color-accent-hover: #9c6440;
+  --color-card: #fff;
+  --color-canvas: #faf6f1;
+}
+
+html[data-theme="dark"] {
+  --color-ink: #f2e9e1;
+  --color-muted: #b3a496;
+  --color-border: #3a2f28;
+  --color-accent: #d19a6c;
+  --color-accent-hover: #e0ab7c;
+  --color-card: #241c17;
+  --color-canvas: #17120f;
+}

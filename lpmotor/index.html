@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- bomond:head -->
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <script
+      id="telegram-sdk"
+      src="https://telegram.org/js/telegram-web-app.js"
+      defer
+    ></script>
+    <script>
+      const preferredTheme = matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+      let savedTheme;
+      try {
+        savedTheme = localStorage.getItem("bomond-theme");
+      } catch {
+        // Use the browser preference when storage is unavailable.
+      }
+      document.documentElement.dataset.theme =
+        savedTheme === "light" || savedTheme === "dark"
+          ? savedTheme
+          : preferredTheme;
+    </script>
+  </head>
+  <body>
+    <div id="root"><!-- bomond:app --></div>
+    <script type="module" src="/src/app/client.tsx"></script>
+  </body>
+</html>

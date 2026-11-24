@@ -1,0 +1,203 @@
+@font-face {
+  font-family: "Manrope";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/manrope/manrope_extra_light.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/manrope/manrope_extra_light.ttf")
+      format("ttf");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/manrope/manrope_light.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/manrope/manrope_light.ttf")
+      format("ttf");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/manrope/manrope_normal.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/manrope/manrope_normal.ttf")
+      format("ttf");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/manrope/manrope_medium.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/manrope/manrope_medium.ttf")
+      format("ttf");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/manrope/manrope_semi_bold.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/manrope/manrope_semi_bold.ttf")
+      format("ttf");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/manrope/manrope_bold.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/manrope/manrope_bold.ttf")
+      format("ttf");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/manrope/manrope_extra_bold.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/manrope/manrope_extra_bold.ttf")
+      format("ttf");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_normal.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_normal.ttf")
+      format("ttf");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_normal_italic.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_normal_italic.ttf")
+      format("ttf");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_medium.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_medium.ttf")
+      format("ttf");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_medium_italic.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_medium_italic.ttf")
+      format("ttf");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_semi_bold.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_semi_bold.ttf")
+      format("ttf");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_semi_bold_italic.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_semi_bold_italic.ttf")
+      format("ttf");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_bold.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_bold.ttf")
+      format("ttf");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_bold_italic.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_bold_italic.ttf")
+      format("ttf");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_ultra_bold.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_ultra_bold.ttf")
+      format("ttf");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  src:
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_ultra_bold_italic.woff")
+      format("woff"),
+    url("https://m-files.cdn1.cc/web/user/fonts/eb_garamond/eb_garamond_ultra_bold_italic.ttf")
+      format("ttf");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}

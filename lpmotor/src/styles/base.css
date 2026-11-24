@@ -1,0 +1,38 @@
+@import "./fonts.css";
+@import "./tokens.css";
+
+html {
+  background: #faf6f1;
+  color: #2b241f;
+  scroll-behavior: smooth;
+}
+
+html[data-theme="dark"] {
+  background: #17120f;
+  color: #f2e9e1;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+}
+
+.bomond :focus-visible {
+  outline: 2px solid #b8794f;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .bomond *,
+  .bomond *::before,
+  .bomond *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
