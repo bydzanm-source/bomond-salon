@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { listen } from "../integrations/sectionRuntime";
 import { useTelegram } from "../integrations/useTelegram";
+import { FallingLeaves } from "../shared/FallingLeaves";
 import { FloatingBooking } from "../shared/FloatingBooking";
 import { useSeason } from "../shared/useSeason";
 
@@ -38,5 +39,13 @@ export function MottorSite() {
     );
   }, [telegramClick]);
 
-  return bookingHost ? createPortal(<FloatingBooking />, bookingHost) : null;
+  return bookingHost
+    ? createPortal(
+        <>
+          <FallingLeaves />
+          <FloatingBooking />
+        </>,
+        bookingHost,
+      )
+    : null;
 }

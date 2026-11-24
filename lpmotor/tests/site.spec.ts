@@ -211,3 +211,18 @@ test("November promotion shows the terms and keeps the referral offer", async ({
       .getByRole("heading", { name: "Приведи подругу — скидка обеим" }),
   ).toBeVisible();
 });
+
+test("autumn leaves move only with motion enabled", async ({ page }) => {
+  await page.goto("/?season=autumn", { waitUntil: "domcontentloaded" });
+  const leaves = page.locator(".falling-leaves");
+  const leaf = leaves.locator("span").first();
+  await expect(leaves).toHaveAttribute("aria-hidden", "true");
+  await expect(leaf).toBeVisible();
+  await expect(leaf).toHaveCSS("animation-name", "none");
+
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await expect(leaf).toHaveCSS("animation-name", "leaf-descent");
+  await page.goto("/?season=winter", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute("data-season", "winter");
+  await expect(leaves).toBeHidden();
+});

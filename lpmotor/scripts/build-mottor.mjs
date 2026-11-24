@@ -81,12 +81,13 @@ await build({
 const { renderSections } = await import(new URL("mottor-server.js", output));
 const css = (name) =>
   readFile(new URL("src/styles/" + name + ".css", project), "utf8");
-const [tokens, ambientTokens, ambient, booking, fonts, index] =
+const [tokens, ambientTokens, ambient, booking, leaves, fonts, index] =
   await Promise.all([
     css("tokens"),
     css("ambient-tokens"),
     css("ambient"),
     css("booking"),
+    css("leaves"),
     css("fonts"),
     readFile(new URL("index.html", project), "utf8"),
   ]);
@@ -109,14 +110,16 @@ const pageHead = headScripts + "<style>" + sharedCss + "</style>";
 if (pageHead.length > 4000)
   throw new Error("LPmotor site head exceeds its limit.");
 
-const bookingCss = (
-  await transformWithEsbuild(booking, "booking.css", {
+const floatingCss = (
+  await transformWithEsbuild(booking + leaves, "floating.css", {
     loader: "css",
     minify: true,
   })
 ).code;
 const pageBody =
-  '<div id="bomond-floating-root"></div><style>' + bookingCss + "</style>";
+  '<div id="bomond-floating-root"></div><style>' + floatingCss + "</style>";
+if (pageBody.length > 4000)
+  throw new Error("LPmotor site body exceeds its limit.");
 const sections = await Promise.all(
   renderSections().map(async ({ name, prefix, html }) => {
     if (

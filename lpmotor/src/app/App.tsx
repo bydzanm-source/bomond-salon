@@ -1,6 +1,7 @@
 import { useTelegram } from "../integrations/useTelegram";
 import { Footer } from "../sections/Footer";
 import { Header } from "../sections/Header";
+import { FallingLeaves } from "../shared/FallingLeaves";
 import { FloatingBooking } from "../shared/FloatingBooking";
 import { useSeason } from "../shared/useSeason";
 import { mainSections } from "./sections";
@@ -22,6 +23,7 @@ export function App() {
         ))}
       </main>
       <Footer />
+      <FallingLeaves />
       <FloatingBooking />
     </div>
   );

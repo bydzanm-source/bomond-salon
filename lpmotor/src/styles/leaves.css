@@ -1,0 +1,113 @@
+.falling-leaves {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+html[data-season="autumn"] .falling-leaves {
+  display: block;
+}
+
+.falling-leaves span {
+  position: absolute;
+  top: 0;
+  left: var(--leaf-edge);
+  width: clamp(12px, 1.55vw, 23px);
+  aspect-ratio: 1.45;
+  border-radius: 80% 12% 80% 14%;
+  background: linear-gradient(135deg, var(--leaf-tint), #98532c);
+  opacity: 0.74;
+  animation: leaf-descent var(--leaf-time) var(--leaf-delay) linear infinite;
+}
+
+.falling-leaves span::after {
+  position: absolute;
+  inset: 48% 9% auto 12%;
+  height: 1px;
+  background: #ffe3af85;
+  content: "";
+  transform: rotate(-17deg);
+}
+
+.falling-leaves span:nth-child(1) {
+  --leaf-edge: 3%;
+  --leaf-tint: #d59542;
+  --leaf-time: 13s;
+  --leaf-delay: -3s;
+}
+.falling-leaves span:nth-child(2) {
+  --leaf-edge: 12%;
+  --leaf-tint: #b44f39;
+  --leaf-time: 17s;
+  --leaf-delay: -13s;
+}
+.falling-leaves span:nth-child(3) {
+  --leaf-edge: 24%;
+  --leaf-tint: #dd9a4b;
+  --leaf-time: 20s;
+  --leaf-delay: -8s;
+}
+.falling-leaves span:nth-child(4) {
+  --leaf-edge: 38%;
+  --leaf-tint: #b86132;
+  --leaf-time: 23s;
+  --leaf-delay: -18s;
+}
+.falling-leaves span:nth-child(5) {
+  --leaf-edge: 64%;
+  --leaf-tint: #ce7b37;
+  --leaf-time: 19s;
+  --leaf-delay: -4s;
+}
+.falling-leaves span:nth-child(6) {
+  --leaf-edge: 77%;
+  --leaf-tint: #dda755;
+  --leaf-time: 17s;
+  --leaf-delay: -11s;
+}
+.falling-leaves span:nth-child(7) {
+  --leaf-edge: 86%;
+  --leaf-tint: #aa503a;
+  --leaf-time: 22s;
+  --leaf-delay: -16s;
+}
+.falling-leaves span:nth-child(8) {
+  --leaf-edge: 94%;
+  --leaf-tint: #d58d43;
+  --leaf-time: 15s;
+  --leaf-delay: -6s;
+}
+
+@keyframes leaf-descent {
+  0% {
+    transform: translate(-12px, -32px) rotate(-55deg);
+  }
+  32% {
+    transform: translate(12px, 32vh) rotate(54deg);
+  }
+  65% {
+    transform: translate(-6px, 67vh) rotate(126deg);
+  }
+  100% {
+    transform: translate(14px, calc(100vh + 32px)) rotate(266deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .falling-leaves span {
+    top: 28%;
+    opacity: 0.48;
+    animation: none;
+    transform: rotate(-26deg);
+  }
+  .falling-leaves span:nth-child(even) {
+    top: 70%;
+    transform: rotate(42deg);
+  }
+  .falling-leaves span:nth-child(n + 3):nth-child(-n + 6) {
+    display: none;
+  }
+}
