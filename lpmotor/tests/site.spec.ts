@@ -141,3 +141,38 @@ test("Telegram Mini App uses the Telegram bridge for booking", async ({
     studio.booking,
   );
 });
+
+test("November promotion shows the terms and keeps the referral offer", async ({
+  page,
+}) => {
+  await page.goto("/#promo", { waitUntil: "domcontentloaded" });
+  const promo = page.locator("#promo");
+  await expect(
+    promo.getByRole("heading", { name: "Ноябрь в Bomond" }),
+  ).toBeVisible();
+  await expect(promo.getByText("До 30 ноября включительно")).toBeVisible();
+  await expect(
+    promo.getByText("При окрашивании у Лины или Алёны."),
+  ).toBeVisible();
+  await expect(
+    promo.getByRole("listitem").filter({ hasText: "Ботокс волос у Кристины" }),
+  ).toContainText("−15%");
+  await expect(
+    promo.getByRole("listitem").filter({ hasText: "Наращивание ресниц" }),
+  ).toContainText("−10%");
+  await expect(
+    promo.getByRole("listitem").filter({ hasText: "Мужские стрижки у Марии" }),
+  ).toContainText("−10%");
+  await expect(
+    promo.getByRole("link", { name: "Записаться по акции" }),
+  ).toHaveAttribute("href", "https://dikidi.net/500351");
+  await expect(
+    promo.getByRole("link", { name: "Акция в Telegram" }),
+  ).toHaveAttribute("href", "https://t.me/bomondblh/422");
+  await expect(promo).not.toContainText(/сентябр/i);
+  await expect(
+    page
+      .locator("#referral")
+      .getByRole("heading", { name: "Приведи подругу — скидка обеим" }),
+  ).toBeVisible();
+});

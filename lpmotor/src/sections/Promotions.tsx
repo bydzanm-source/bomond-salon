@@ -8,73 +8,66 @@ export function Promotions() {
       <AmbientBackdrop className="promotions-aurora" />
       <div className="promotions-wrap">
         <div className="promotions-featured">
-          <div className="promotions-featured-text promotions-reveal">
-            <p className="promotions-eyebrow">Акция месяца</p>
-            <h2 className="promotions-title">
-              Супер акция <span className="promotions-shine">сентября</span>
-            </h2>
-            <p className="promotions-lede">
-              Дарим не только хорошее настроение, но и подарки — каждого гостя
-              ждёт беспроигрышная лотерея.
+          <div className="promotions-featured-text">
+            <p className="promotions-period">
+              <time dateTime="2026-11-30">До 30 ноября включительно</time>
             </p>
-            <span className="promotions-badge">
-              <span className="promotions-badge-text">Весь сентябрь</span>
-            </span>
-            <h3 className="promotions-sub">Правила предельно просты</h3>
-            <ol className="promotions-steps">
-              <li className="promotions-step">
-                <span className="promotions-step-num">1</span>
-                <span className="promotions-step-text">
-                  Запишитесь в сентябре онлайн — на Dikidi или прямо здесь, на
-                  сайте
-                </span>
+            <h2 className="promotions-title">Ноябрь в Bomond</h2>
+
+            <div className="promotions-gift">
+              <p className="promotions-gift-label">Подарок к окрашиванию</p>
+              <h3>Ампульное восстановление волос</h3>
+              <p>При окрашивании у Лины или Алёны.</p>
+            </div>
+
+            <ul className="promotions-offers">
+              <li>
+                <span className="promotions-offer-value">−15%</span>
+                <span>Ботокс волос у Кристины</span>
               </li>
-              <li className="promotions-step">
-                <span className="promotions-step-num">2</span>
-                <span className="promotions-step-text">
-                  Приходите в студию красоты Bomond
-                </span>
+              <li>
+                <span className="promotions-offer-value">−10%</span>
+                <span>Наращивание ресниц</span>
               </li>
-              <li className="promotions-step">
-                <span className="promotions-step-num">3</span>
-                <span className="promotions-step-text">
-                  После процедуры испытайте удачу в беспроигрышной лотерее
-                </span>
+              <li>
+                <span className="promotions-offer-value">−10%</span>
+                <span>Мужские стрижки у Марии</span>
               </li>
-              <li className="promotions-step">
-                <span className="promotions-step-num">4</span>
-                <span className="promotions-step-text">
-                  Остались вопросы — администратор с удовольствием подскажет
-                </span>
-              </li>
-            </ol>
+            </ul>
+
             <div className="promotions-actions">
               <a
-                href={studio.booking}
+                href="https://dikidi.net/500351"
                 target="_blank"
                 rel="noopener"
                 className="promotions-btn promotions-btn--primary"
               >
-                Записаться и участвовать
+                Записаться по акции
               </a>
               <a
-                href="https://t.me/bomondblh/344"
+                href="https://t.me/bomondblh/422"
                 target="_blank"
                 rel="noopener"
-                className="promotions-btn promotions-btn--secondary"
+                className="promotions-offer-source"
               >
-                Пост в Telegram-канале →
+                Акция в Telegram
               </a>
             </div>
           </div>
-          <div className="promotions-featured-media promotions-reveal">
-            <img
-              className="promotions-photo"
-              src="https://m-files.cdn1.cc/lpfile/6/e/6/6e6c9f51b92d65f4a5e666b63d2e920d.jpg"
-              alt="Акция сентября в студии Bomond"
-              loading="lazy"
-            />
-          </div>
+
+          <figure className="promotions-featured-media">
+            <div className="promotions-photo-frame">
+              <img
+                className="promotions-photo"
+                src="https://m-files.cdn1.cc/lpfile/e/8/6/e867911644bec23dd4fe9af0cf1870fb.jpeg"
+                alt="Медное окрашивание и укладка в Bomond"
+                width="420"
+                height="525"
+                loading="lazy"
+              />
+            </div>
+            <figcaption>Окрашивание в Bomond</figcaption>
+          </figure>
         </div>
 
         <div className="promotions-referral promotions-reveal" id="referral">

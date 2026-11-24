@@ -40,15 +40,6 @@
   color: var(--promotions-gold);
   margin: 0 0 16px;
 }
-.promotions-title {
-  letter-spacing: 0.2px;
-  font-family: "EB Garamond", serif;
-  font-weight: 600;
-  font-size: 44px;
-  line-height: 1.2;
-  color: var(--promotions-text);
-  margin: 0 0 16px;
-}
 .promotions-shine {
   background: linear-gradient(
     100deg,
@@ -64,59 +55,6 @@
   color: transparent;
   animation: promotions-shine 5.5s ease-in-out 1.2s infinite;
 }
-.promotions-lede {
-  font-family: "Manrope", sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--promotions-muted);
-  margin: 0 0 20px;
-  max-width: 520px;
-}
-.promotions-badge {
-  position: relative;
-  overflow: hidden;
-  display: inline-block;
-  background: var(--promotions-gold);
-  color: var(--promotions-on-gold);
-  font-family: "Manrope", sans-serif;
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 1.6px;
-  text-transform: uppercase;
-  padding: 8px 16px;
-  border-radius: 100px;
-  margin-bottom: 24px;
-}
-.promotions-badge-text {
-  position: relative;
-  z-index: 1;
-}
-.promotions-badge::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.6) 50%,
-    transparent 70%
-  );
-  transform: translateX(-120%);
-  animation: promotions-badge-shine 4s ease-in-out 2s infinite;
-}
-.promotions-sub {
-  letter-spacing: 0.2px;
-  font-family: "EB Garamond", serif;
-  font-weight: 600;
-  font-size: 26px;
-  color: var(--promotions-text);
-  margin: 0 0 18px;
-}
-.promotions-steps,
 .promotions-ref-steps {
   list-style: none;
   margin: 0 0 28px;
@@ -201,42 +139,122 @@
   filter: brightness(1.08);
   transform: translateY(-2px);
 }
-.promotions-btn--secondary {
-  background: transparent;
-  color: var(--promotions-text);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-}
-.promotions-btn--secondary:hover {
-  border-color: var(--promotions-gold);
-  color: var(--promotions-gold);
-}
 .promotions-featured {
+  display: grid;
+  grid-template-columns: minmax(0, 1.16fr) minmax(0, 0.84fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 72px);
+  margin-bottom: 32px;
+  padding: clamp(24px, 5vw, 68px);
+  border: 1px solid #a77658;
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 88% 22%, #62372e, transparent 62%), #271927;
+  color: #fff5ea;
+  font-family: "Manrope", sans-serif;
+}
+.promotions-period {
   display: flex;
   align-items: center;
-  gap: 48px;
-  margin-bottom: 32px;
-  background: var(--promotions-panel);
-  border: 1px solid var(--promotions-panel-border);
-  border-radius: 24px;
-  padding: 40px;
-  box-sizing: border-box;
+  gap: 12px;
+  margin: 0 0 10px;
+  color: #f4cb93;
+  font-size: 14px;
+  font-weight: 700;
 }
-.promotions-featured-text {
-  flex: 1 1 520px;
-  min-width: 280px;
+.promotions-period::before {
+  content: "";
+  flex: 0 0 26px;
+  height: 1px;
+  background: currentColor;
+}
+.promotions-title {
+  color: inherit;
+  margin: 0 0 24px;
+  font:
+    600 clamp(42px, 6vw, 84px) / 0.94 "EB Garamond",
+    serif;
+  letter-spacing: -0.045em;
+}
+.promotions-gift {
+  padding: 16px 18px;
+  border-left: 3px solid #d6a775;
+  background: #fff1dd;
+  color: #392230;
+}
+.promotions-gift .promotions-gift-label {
+  color: #774633;
+  font-size: 13px;
+  font-weight: 800;
+}
+.promotions-gift h3 {
+  color: inherit;
+  margin: 3px 0;
+  font:
+    600 clamp(25px, 3.1vw, 36px) / 1 "EB Garamond",
+    serif;
+}
+.promotions-gift p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.promotions-offers {
+  list-style: none;
+  margin: 16px 0 22px;
+  padding: 0;
+}
+.promotions-offers li {
+  display: grid;
+  grid-template-columns: 4.4rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #ffffff35;
+  font-size: 15px;
+}
+.promotions-offer-value {
+  color: #f4cb93;
+  font:
+    600 27px / 1 "EB Garamond",
+    serif;
+  font-variant-numeric: tabular-nums;
+}
+.promotions-offer-source {
+  display: inline-block;
+  padding: 8px 0;
+  color: #fff5ea;
+  font-size: 14px;
+  text-underline-offset: 0.24em;
+}
+.promotions-offer-source:hover {
+  color: #f4cb93;
 }
 .promotions-featured-media {
-  flex: 0 1 300px;
-  min-width: 240px;
-  max-width: 300px;
-  animation: promotions-float 7s ease-in-out infinite;
+  min-width: 0;
+  margin: 0;
+}
+.promotions-photo-frame {
+  overflow: hidden;
+  padding: 7px;
+  border: 1px solid #d9ac80;
+  border-radius: 50% 50% 14px 14px / 31% 31% 14px 14px;
 }
 .promotions-photo {
+  display: block;
   width: 100%;
   height: auto;
-  display: block;
-  border-radius: 14px;
-  box-shadow: 0 30px 60px -20px var(--promotions-shadow);
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: inherit;
+}
+.promotions-featured-media figcaption {
+  margin-top: 12px;
+  color: #f1cfa7;
+  text-align: center;
+  font:
+    500 18px / 1.2 "EB Garamond",
+    serif;
 }
 .promotions-referral {
   background: var(--promotions-panel);
@@ -448,24 +466,6 @@
     background-position: -10% 0;
   }
 }
-@keyframes promotions-badge-shine {
-  0% {
-    transform: translateX(-120%);
-  }
-  40%,
-  100% {
-    transform: translateX(120%);
-  }
-}
-@keyframes promotions-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
 .promotions-eyebrow::before {
   content: "";
   display: inline-block;
@@ -495,10 +495,6 @@
 .promotions-wrap {
   position: relative;
   z-index: 1;
-}
-.promotions-featured-media {
-  overflow: hidden;
-  border-radius: 14px;
 }
 .promotions-photo {
   transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -544,16 +540,13 @@
     opacity: 1;
     transform: none;
   }
-  .promotions-shine,
-  .promotions-badge::after,
-  .promotions-featured-media {
+  .promotions-shine {
     animation: none !important;
   }
 }
 @media (max-width: 900px) {
   .promotions-featured {
-    flex-direction: column;
-    padding: 28px 22px !important;
+    grid-template-columns: minmax(0, 1fr);
     margin-bottom: 24px;
   }
   .promotions-referral {
@@ -561,9 +554,6 @@
   }
   .promotions-ref-grid {
     flex-direction: column;
-  }
-  .promotions-title {
-    font-size: 35px !important;
   }
   .promotions-ref-title {
     font-size: 30px !important;
