@@ -101,9 +101,14 @@ export function Contacts() {
           <div className="contacts-map">
             <div className="contacts-map-card contacts-reveal">
               <span className="contacts-map-brand">Bomond</span>
-              <span className="contacts-map-address">
-                шоссе Энтузиастов, 7/1, Балашиха
-              </span>
+              <a
+                className="contacts-map-address"
+                href={studio.yandex}
+                target="_blank"
+                rel="noopener"
+              >
+                {`${studio.street}, ${studio.city}`}
+              </a>
               <a
                 href={studio.directions}
                 target="_blank"

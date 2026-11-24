@@ -43,6 +43,11 @@ const salonSchema = {
     postalCode: studio.postalCode,
     addressCountry: "RU",
   },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: studio.latitude,
+    longitude: studio.longitude,
+  },
   openingHoursSpecification: {
     "@type": "OpeningHoursSpecification",
     dayOfWeek: [

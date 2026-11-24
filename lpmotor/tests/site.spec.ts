@@ -14,6 +14,10 @@ test("server HTML includes the whole page and indexing metadata", async ({
   expect(html).toContain('"@type":"BeautySalon"');
   expect(html).toContain('name="robots" content="noindex, follow"');
   expect(html).toContain(studio.booking);
+  expect(html).toContain("rtext=~55.794874,37.932743");
+  expect(html).toContain(
+    '"geo":{"@type":"GeoCoordinates","latitude":55.794874,"longitude":37.932743}',
+  );
   expect(html).toContain("Наращивание ресниц");
   expect(html).toContain("Маргарита Манина");
   expect(html).toContain("Выход из чёрного");
