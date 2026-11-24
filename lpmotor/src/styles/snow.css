@@ -34,6 +34,27 @@
   animation: snow-drift linear infinite;
 }
 
+.snow-flurry svg {
+  translate: calc(var(--snow-wind, 0px) * var(--snow-response));
+  transition: translate 2s ease-in-out;
+}
+
+.snow-squall {
+  --snow-direction: calc(var(--snow-side, 1) * 2.3);
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.45s ease;
+}
+
+[data-snow-weather="squall"] .snow-squall {
+  opacity: 0.88;
+}
+
+[data-snow-weather="calm"] .snow-squall .snow-flurry {
+  animation-play-state: paused;
+}
+
 @keyframes snow-drift {
   0% {
     transform: translate3d(-8px, -24px, 0) rotate(-30deg);
@@ -43,15 +64,25 @@
     opacity: 0.9;
   }
   45% {
-    transform: translate3d(var(--snow-drift), 45vh, 0) rotate(65deg);
+    transform: translate3d(
+        calc(var(--snow-drift) * var(--snow-direction, 1)),
+        45vh,
+        0
+      )
+      rotate(65deg);
   }
   82% {
     opacity: 0.82;
   }
   100% {
-    transform: translate3d(-12px, calc(100vh + 20px), 0) rotate(160deg);
+    transform: translate3d(var(--snow-exit, -12px), calc(100vh + 20px), 0)
+      rotate(160deg);
     opacity: 0;
   }
+}
+
+.snow-squall .snow-flurry {
+  --snow-exit: calc(var(--snow-drift) * var(--snow-direction) * 1.6);
 }
 
 .snow-drift {
@@ -73,15 +104,12 @@
   transform: scaleY(var(--snow-height, 0.3));
   transform-origin: center bottom;
   filter: drop-shadow(0 1px 1px #5066865c);
-  transition:
-    transform 0.38s ease-out,
-    opacity 0.38s ease-out;
 }
 
 .snow-contact {
   width: 13px;
-  left: 52%;
-  top: 22%;
+  left: 0;
+  top: 0;
   opacity: 0;
 }
 
@@ -89,14 +117,15 @@
   .snow-flurry:nth-child(n + 10) {
     display: none;
   }
+  .snow-squall .snow-flurry:nth-child(n + 4) {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .snow-flurry,
-  .snow-contact {
+  .snow-contact,
+  .snow-squall {
     display: none;
-  }
-  .snow-ridge {
-    transition: none;
   }
 }

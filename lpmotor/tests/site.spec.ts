@@ -396,3 +396,80 @@ test("snowflakes build caps on text and photos and follow their anchors", async 
   await expect(page.locator(".snow-flurry").first()).toBeHidden();
   await expect(heading).toHaveAttribute("data-snow-depth", "3");
 });
+
+test("a landing meets the raised snow profile and grows it from the base", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/?season=winter", { waitUntil: "domcontentloaded" });
+  const photo = page.locator('[data-snow-surface="photo"]').first();
+  const landedAt = await photo.evaluate(async (bank) => {
+    const flake = bank.querySelector<HTMLElement>(".snow-contact")!;
+    const ridge = bank.querySelector<SVGSVGElement>(".snow-ridge")!;
+    const profile = ridge.querySelector("path")!;
+    const firstFlight = flake.getAnimations()[0];
+    firstFlight.finish();
+    const untilNextFlight = () =>
+      new Promise<Animation>((resolve) => {
+        const sample = () => {
+          const flight = flake
+            .getAnimations()
+            .find((item) => Number(item.effect?.getTiming().duration) > 1000);
+          if (flight && Number(bank.getAttribute("data-snow-depth")) === 1)
+            resolve(flight);
+          else requestAnimationFrame(sample);
+        };
+        requestAnimationFrame(sample);
+      });
+    const secondFlight = await untilNextFlight();
+    secondFlight.pause();
+    secondFlight.currentTime =
+      Number(secondFlight.effect!.getTiming().duration) - 1;
+    const flakeBounds = flake.getBoundingClientRect();
+    const x = flakeBounds.x + flakeBounds.width * 0.5;
+    const y =
+      flakeBounds.y +
+      flakeBounds.height * 0.5 +
+      flake.offsetWidth * 0.48 * 0.44;
+    const inverse = profile.getScreenCTM()!.inverse();
+    const above = profile.isPointInFill(
+      new DOMPoint(x, y - 1.5).matrixTransform(inverse),
+    );
+    const below = profile.isPointInFill(
+      new DOMPoint(x, y + 1.5).matrixTransform(inverse),
+    );
+    const before = ridge.getBoundingClientRect();
+    secondFlight.finish();
+    await new Promise((resolve) => setTimeout(resolve, 480));
+    const after = ridge.getBoundingClientRect();
+    return {
+      above,
+      below,
+      rise: before.top - after.top,
+      baseShift: Math.abs(before.bottom - after.bottom),
+    };
+  });
+  expect(landedAt.above).toBe(false);
+  expect(landedAt.below).toBe(true);
+  expect(landedAt.rise).toBeGreaterThan(2);
+  expect(landedAt.baseShift).toBeLessThan(1);
+  await expect(photo).toHaveAttribute("data-snow-depth", "2");
+});
+
+test("winter squalls ramp up and return to calm", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.clock.install();
+  await page.goto("/?season=winter", { waitUntil: "domcontentloaded" });
+  const layer = page.locator(".snowfall");
+  await expect(layer).toHaveAttribute("data-snow-weather", "calm");
+  await page.clock.fastForward(19000);
+  await expect(layer).toHaveAttribute("data-snow-weather", "squall");
+  await expect(layer).toHaveCSS("--snow-wind", /^-?[6-9]\d(?:\.\d+)?px$/);
+  await expect(layer.locator(".snow-squall .snow-flurry").first()).toHaveCSS(
+    "animation-play-state",
+    "running",
+  );
+  await page.clock.fastForward(6400);
+  await expect(layer).toHaveAttribute("data-snow-weather", "calm");
+  await expect(layer).toHaveCSS("--snow-wind", "");
+});

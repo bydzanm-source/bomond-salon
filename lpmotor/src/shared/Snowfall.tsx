@@ -1,4 +1,4 @@
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { observeSnowfall } from "./snowMotion";
 import "../styles/snow.css";
 
@@ -39,6 +39,40 @@ const lanes = [
   [76, 7, 17, -3, 35],
 ];
 
+const squallLanes = [
+  [8, 9, 6, -2, 48],
+  [27, 12, 7, -4, 58],
+  [45, 8, 5, -1, 42],
+  [64, 10, 6, -3, 65],
+  [82, 11, 8, -5, 56],
+];
+
+function Flurry({ tracks }: { tracks: number[][] }) {
+  const [weatherStyles] = useState(() =>
+    tracks.map(
+      ([lane, size, speed, offset, drift]) =>
+        ({
+          left: lane + (Math.random() * 4 - 2) + "%",
+          width: size,
+          animationDuration: speed * (0.84 + Math.random() * 0.32) + "s",
+          animationDelay: offset + "s",
+          "--snow-drift": drift * (0.54 + Math.random() * 0.93) + "px",
+          "--snow-response": 0.55 + Math.random() * 0.45,
+        }) as CSSProperties,
+    ),
+  );
+  return weatherStyles.map((style, index) => (
+    <span
+      className="snow-flurry"
+      data-snow-sway={tracks[index][4]}
+      key={tracks[index][0]}
+      style={style}
+    >
+      <Crystal variant={index} />
+    </span>
+  ));
+}
+
 const ridges = [
   "M1 23 Q6 18 15 17 Q22 8 33 11 Q44 3 57 9 Q69 1 82 8 Q91 7 99 13 Q108 9 118 14 Q134 12 153 22 Q113 24 78 23 Q35 24 1 23Z",
   "M1 23 Q12 17 21 17 Q29 12 37 14 Q50 5 62 11 Q76 3 92 10 Q104 8 113 15 Q126 13 153 23 Q117 24 77 23 Q33 24 1 23Z",
@@ -52,23 +86,10 @@ export function Snowfall() {
 
   return (
     <div ref={layer} className="snowfall" aria-hidden="true">
-      {lanes.map(([lane, size, speed, offset, drift], index) => (
-        <span
-          className="snow-flurry"
-          key={lane}
-          style={
-            {
-              left: lane + "%",
-              width: size,
-              animationDuration: speed + "s",
-              animationDelay: offset + "s",
-              "--snow-drift": drift + "px",
-            } as CSSProperties
-          }
-        >
-          <Crystal variant={index} />
-        </span>
-      ))}
+      <Flurry tracks={lanes} />
+      <div className="snow-squall">
+        <Flurry tracks={squallLanes} />
+      </div>
       {Array.from({ length: 3 }, (_, index) => (
         <div key={index} className="snow-drift" data-snow-drift>
           <svg

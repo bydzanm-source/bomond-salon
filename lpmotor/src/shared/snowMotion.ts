@@ -8,13 +8,38 @@ import {
 type SnowBank = {
   element: HTMLElement;
   flake: HTMLElement;
+  ridge: SVGSVGElement;
+  profile: SVGPathElement;
   target?: Element;
   kind?: SeasonalSurface;
   flight?: Animation;
+  growth?: Animation;
   cancelNext?: () => void;
 };
 
 const maximumDepth = 4;
+const landingScale = 0.48;
+const heightAtDepth = (depth: number) => 0.34 + depth * 0.18;
+const between = (min: number, max: number) => min + Math.random() * (max - min);
+
+function snowSurface(bank: SnowBank, lane: number, depth: number) {
+  const { width, height } = bank.ridge.viewBox.baseVal;
+  const x = bank.element.clientWidth * lane;
+  const baseline = bank.element.clientHeight;
+  if (!depth) return { x, y: baseline };
+
+  // Find the topmost snow at the precise point where this flake will land.
+  let above = 0;
+  let inside = height - 1;
+  const point = new DOMPoint(width * lane, 0);
+  for (let step = 0; step < 8; step++) {
+    point.y = (above + inside) / 2;
+    if (bank.profile.isPointInFill(point)) inside = point.y;
+    else above = point.y;
+  }
+  const y = baseline - (1 - inside / height) * baseline * heightAtDepth(depth);
+  return { x, y };
+}
 
 export function observeSnowfall(layer: HTMLElement) {
   const banks = Array.from(
@@ -22,15 +47,40 @@ export function observeSnowfall(layer: HTMLElement) {
   ).map((element): SnowBank => ({
     element,
     flake: element.querySelector<HTMLElement>(".snow-contact")!,
+    ridge: element.querySelector<SVGSVGElement>(".snow-ridge")!,
+    profile: element.querySelector<SVGPathElement>(".snow-ridge path")!,
   }));
   const depths = new WeakMap<Element, number>();
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
   let frame = 0;
+  let viewportWidth = layer.clientWidth;
   let cancelRescan: (() => void) | undefined;
+  let cancelWeather: (() => void) | undefined;
+  let wind = 0;
+
+  function weather() {
+    cancelWeather?.();
+    wind = 0;
+    layer.dataset.snowWeather = "calm";
+    layer.style.removeProperty("--snow-wind");
+    if (document.hidden || motion.matches) return;
+    cancelWeather = delay(
+      () => {
+        wind = between(64, 100) * (Math.random() < 0.5 ? -1 : 1);
+        layer.dataset.snowWeather = "squall";
+        layer.style.setProperty("--snow-wind", wind + "px");
+        layer.style.setProperty("--snow-side", String(Math.sign(wind)));
+        cancelWeather = delay(weather, between(4400, 6200));
+      },
+      between(10000, 18500),
+    );
+  }
 
   function stopFlight(bank: SnowBank) {
     bank.flight?.cancel();
     bank.flight = undefined;
+    bank.growth?.cancel();
+    bank.growth = undefined;
     bank.cancelNext?.();
     bank.cancelNext = undefined;
   }
@@ -40,7 +90,7 @@ export function observeSnowfall(layer: HTMLElement) {
     bank.element.style.setProperty("--snow-strength", depth === 0 ? "0" : "1");
     bank.element.style.setProperty(
       "--snow-height",
-      String(0.34 + depth * 0.18),
+      String(heightAtDepth(depth)),
     );
   }
 
@@ -49,55 +99,107 @@ export function observeSnowfall(layer: HTMLElement) {
     if (!target || document.hidden || motion.matches) return;
     position(bank, index);
     const previous = depths.get(target) ?? 0;
-    const side = (index + previous) % 2 ? 1 : -1;
-    const distance = Math.min(210, Math.max(32, bank.element.offsetTop - 55));
+    const side = Math.random() < 0.5 ? 1 : -1;
+    const amplitude = between(17, 41);
+    const lane = between(0.36, 0.64);
+    const surface = snowSurface(bank, lane, previous);
+    const halfFlake = bank.flake.offsetWidth / 2;
+    const pose = (x: number, y: number, angle: number, scale = 1) =>
+      `translate3d(${surface.x + x - halfFlake}px,${y - halfFlake}px,0) rotate(${angle}deg) scale(${scale})`;
+    const distance = Math.min(
+      between(160, 245),
+      Math.max(32, bank.element.offsetTop - 55),
+    );
+    const contactY = surface.y - halfFlake * landingScale * 0.88;
+    const contact = pose(0, contactY, 100, landingScale);
     const flight = bank.flake.animate(
       [
         {
-          transform:
-            "translate(" + side * 32 + "px," + -distance + "px) rotate(-52deg)",
+          transform: pose(
+            side * amplitude - wind * 0.58,
+            surface.y - distance,
+            -52,
+          ),
           opacity: 0,
         },
         {
-          transform:
-            "translate(" +
-            -side * 18 +
-            "px," +
-            -distance * 0.67 +
-            "px) rotate(8deg)",
+          transform: pose(
+            -side * amplitude * 0.72 - wind * 0.41,
+            surface.y - distance * 0.67,
+            8,
+          ),
           opacity: 0.96,
           offset: 0.26,
         },
         {
-          transform:
-            "translate(" +
-            side * 14 +
-            "px," +
-            -distance * 0.21 +
-            "px) rotate(67deg)",
+          transform: pose(
+            side * amplitude * 0.4 - wind * 0.15,
+            surface.y - distance * 0.21,
+            67,
+            0.9,
+          ),
           opacity: 0.93,
-          offset: 0.76,
+          offset: 0.7,
         },
         {
-          transform: "translate(-50%, 2px) rotate(110deg) scale(.42)",
-          opacity: 0.68,
-          offset: 0.96,
+          transform: pose(-side * 3, contactY - 9, 94, 0.67),
+          opacity: 0.94,
+          offset: 0.89,
         },
         {
-          transform: "translate(-50%, 5px) rotate(110deg) scale(.18)",
-          opacity: 0,
+          transform: contact,
+          opacity: 0.97,
         },
       ],
-      { duration: 1530 + index * 330, easing: "cubic-bezier(.28,.61,.50,1)" },
+      {
+        duration: between(1420, 1650) + index * 285,
+        easing: "cubic-bezier(.28,.48,.54,1)",
+        fill: "forwards",
+      },
     );
     bank.flight = flight;
     flight.onfinish = () => {
       if (bank.flight !== flight) return;
-      bank.flight = undefined;
       const next = Math.min(maximumDepth, previous + 1);
       depths.set(target, next);
       paintDepth(bank, next);
-      bank.cancelNext = delay(() => sendFlake(bank, index), 550 + index * 190);
+      const initialScale = heightAtDepth(previous);
+      const finalScale = heightAtDepth(next);
+      bank.growth = bank.ridge.animate(
+        [
+          { transform: `scaleY(${initialScale})`, opacity: previous ? 1 : 0 },
+          {
+            transform: `scaleY(${initialScale * (previous ? 0.97 : 1)})`,
+            opacity: previous ? 1 : 0.55,
+            offset: 0.18,
+          },
+          { transform: `scaleY(${finalScale})`, opacity: 1 },
+        ],
+        { duration: 410, easing: "cubic-bezier(.21,.62,.39,1)" },
+      );
+      const rise = surface.y - snowSurface(bank, lane, next).y;
+      const merge = bank.flake.animate(
+        [
+          { transform: contact, opacity: 0.97 },
+          {
+            transform: pose(0, surface.y - rise * 0.55, 103, 0.26),
+            opacity: 0.6,
+            offset: 0.45,
+          },
+          { transform: pose(0, surface.y - rise, 108, 0.12), opacity: 0 },
+        ],
+        { duration: 330, easing: "ease-out" },
+      );
+      bank.flight = merge;
+      flight.cancel();
+      merge.onfinish = () => {
+        if (bank.flight !== merge) return;
+        bank.flight = undefined;
+        bank.cancelNext = delay(
+          () => sendFlake(bank, index),
+          400 + index * 170,
+        );
+      };
     };
   }
 
@@ -190,21 +292,45 @@ export function observeSnowfall(layer: HTMLElement) {
     rescan();
   }
 
+  function onMotionChange() {
+    reset();
+    weather();
+  }
+
+  function resize() {
+    if (viewportWidth === layer.clientWidth) {
+      update();
+      return;
+    }
+    viewportWidth = layer.clientWidth;
+    reset();
+  }
+
+  function varySway(event: Event) {
+    const flake = event.target;
+    if (!(flake instanceof HTMLElement) || !flake.dataset.snowSway) return;
+    const sway = Number(flake.dataset.snowSway) * between(0.54, 1.47);
+    flake.style.setProperty("--snow-drift", sway + "px");
+  }
+
   const cleanups = [
     listen(window, "scroll", update),
-    listen(window, "resize", update),
+    listen(window, "resize", resize),
     listen(document, "load", update, true),
-    listen(document, "visibilitychange", reset),
+    listen(document, "visibilitychange", onMotionChange),
+    listen(layer, "animationiteration", varySway),
   ];
-  motion.addEventListener("change", reset);
+  motion.addEventListener("change", onMotionChange);
   void document.fonts.ready.then(() => {
     if (layer.isConnected) update();
   });
   rescan();
+  weather();
   return () => {
-    motion.removeEventListener("change", reset);
+    motion.removeEventListener("change", onMotionChange);
     cleanups.forEach((cleanup) => cleanup());
     cancelRescan?.();
+    cancelWeather?.();
     cancelAnimationFrame(frame);
     banks.forEach(release);
   };
