@@ -1,4 +1,5 @@
 import { studio } from "../content/studio";
+import { followSectionLink } from "../shared/sectionLink";
 import "../styles/hero.css";
 
 export function Hero() {
@@ -23,7 +24,11 @@ export function Hero() {
             >
               Записаться онлайн
             </a>
-            <a href="#works" className="hero-btn hero-btn--secondary">
+            <a
+              href="#works"
+              className="hero-btn hero-btn--secondary"
+              onClick={followSectionLink}
+            >
               Смотреть работы <span aria-hidden="true">↘</span>
             </a>
           </div>

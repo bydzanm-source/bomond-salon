@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { navigation, studio } from "../content/studio";
+import { followSectionLink } from "../shared/sectionLink";
 import { useTheme } from "../shared/useTheme";
 import "../styles/header.css";
 
@@ -25,7 +26,12 @@ export function Header() {
         </a>
         <nav className="header-nav" aria-label="Основная навигация">
           {navigation.map(({ id, label }) => (
-            <a href={`#${id}`} className="header-link" key={id}>
+            <a
+              href={`#${id}`}
+              className="header-link"
+              key={id}
+              onClick={id === "works" ? followSectionLink : undefined}
+            >
               {label}
             </a>
           ))}
@@ -91,7 +97,10 @@ export function Header() {
               href={`#${id}`}
               className="header-panel-link"
               key={id}
-              onClick={() => setMenuOpen(false)}
+              onClick={(event) => {
+                if (id === "works" && !followSectionLink(event)) return;
+                setMenuOpen(false);
+              }}
             >
               {label}
             </a>

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { priceZones } from "../content/prices";
-import { followPriceLink } from "../shared/priceLink";
+import { followSectionLink } from "../shared/sectionLink";
 
 const works = [
   { ...priceZones[0].photos[1], zone: 1 },
@@ -75,7 +75,7 @@ export function Portfolio() {
               className="services-dialog-price"
               href={`#price-${work.zone}`}
               onClick={(event) => {
-                if (followPriceLink(event)) dialog.current?.close();
+                if (followSectionLink(event)) dialog.current?.close();
               }}
             >
               Смотреть цены

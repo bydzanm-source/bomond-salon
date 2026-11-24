@@ -1,5 +1,5 @@
 import { services } from "../content/services";
-import { followPriceLink } from "../shared/priceLink";
+import { followSectionLink } from "../shared/sectionLink";
 import { Portfolio } from "./Portfolio";
 import "../styles/services.css";
 
@@ -19,7 +19,7 @@ export function Services() {
               className="services-card"
               href={`#price-${service.priceZone}`}
               key={service.priceZone}
-              onClick={followPriceLink}
+              onClick={followSectionLink}
             >
               <div className="services-media">
                 <img
