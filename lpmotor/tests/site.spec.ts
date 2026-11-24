@@ -473,3 +473,52 @@ test("winter squalls ramp up and return to calm", async ({ page }) => {
   await expect(layer).toHaveAttribute("data-snow-weather", "calm");
   await expect(layer).toHaveCSS("--snow-wind", "");
 });
+
+test("the same snow cap receives visibly different approaches", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/?season=winter", { waitUntil: "domcontentloaded" });
+  const cap = page.locator('[data-snow-surface="heading"]').first();
+  const approaches = await cap.evaluate(async (bank) => {
+    const flake = bank.querySelector(".snow-contact")!;
+    const routes: { offsets: string; sweep: number }[] = [];
+    let previous: Animation | undefined;
+    for (let index = 0; index < 5; index++) {
+      const flight = await new Promise<Animation>((resolve) => {
+        const nextFrame = () => {
+          const candidate = flake
+            .getAnimations()
+            .find(
+              (item) =>
+                item !== previous &&
+                Number(item.effect?.getTiming().duration) > 1000,
+            );
+          if (candidate) resolve(candidate);
+          else requestAnimationFrame(nextFrame);
+        };
+        nextFrame();
+      });
+      const frames = (flight.effect as KeyframeEffect).getKeyframes();
+      const coordinates = frames.map((frame) =>
+        Number(String(frame.transform).match(/translate3d\(([-.\d]+)/)?.[1]),
+      );
+      routes.push({
+        offsets: frames.map((frame) => frame.computedOffset).join(","),
+        sweep: Math.max(...coordinates) - Math.min(...coordinates),
+      });
+      previous = flight;
+      flight.finish();
+    }
+    return routes;
+  });
+  expect(
+    approaches.every(
+      (route, index) =>
+        index === 0 || route.offsets !== approaches[index - 1].offsets,
+    ),
+  ).toBe(true);
+  expect(Math.max(...approaches.map((route) => route.sweep))).toBeGreaterThan(
+    40,
+  );
+});

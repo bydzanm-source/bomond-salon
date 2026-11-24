@@ -15,12 +15,44 @@ type SnowBank = {
   flight?: Animation;
   growth?: Animation;
   cancelNext?: () => void;
+  lastRoute?: number;
 };
 
 const maximumDepth = 4;
 const landingScale = 0.48;
 const heightAtDepth = (depth: number) => 0.34 + depth * 0.18;
 const between = (min: number, max: number) => min + Math.random() * (max - min);
+
+// Each waypoint gives the time, sideways displacement and remaining height.
+const descentRoutes = [
+  [
+    [0, 1, 1],
+    [0.26, 0.82, 0.74],
+    [0.54, 0.46, 0.42],
+    [0.78, 0.12, 0.15],
+  ],
+  [
+    [0, -0.68, 1],
+    [0.17, 0.32, 0.79],
+    [0.38, -0.54, 0.6],
+    [0.58, 0.48, 0.43],
+    [0.78, -0.21, 0.19],
+  ],
+  [
+    [0, 0.8, 1],
+    [0.23, 0.5, 0.74],
+    [0.52, -0.69, 0.39],
+    [0.74, -0.54, 0.22],
+    [0.87, -0.16, 0.07],
+  ],
+  [
+    [0, -0.93, 1],
+    [0.23, -0.45, 0.61],
+    [0.43, 0.5, 0.36],
+    [0.58, 0.72, 0.43],
+    [0.77, 0.2, 0.19],
+  ],
+];
 
 function snowSurface(bank: SnowBank, lane: number, depth: number) {
   const { width, height } = bank.ridge.viewBox.baseVal;
@@ -100,51 +132,52 @@ export function observeSnowfall(layer: HTMLElement) {
     position(bank, index);
     const previous = depths.get(target) ?? 0;
     const side = Math.random() < 0.5 ? 1 : -1;
-    const amplitude = between(17, 41);
-    const lane = between(0.36, 0.64);
+    const lastRoute = bank.lastRoute ?? descentRoutes.length;
+    const draw = Math.floor(
+      Math.random() *
+        (descentRoutes.length - Number(bank.lastRoute !== undefined)),
+    );
+    const route = draw >= lastRoute ? draw + 1 : draw;
+    bank.lastRoute = route;
+    const amplitude = Math.min(between(72, 151), layer.clientWidth * 0.32);
+    const lane = between(0.28, 0.72);
     const surface = snowSurface(bank, lane, previous);
     const halfFlake = bank.flake.offsetWidth / 2;
     const pose = (x: number, y: number, angle: number, scale = 1) =>
       `translate3d(${surface.x + x - halfFlake}px,${y - halfFlake}px,0) rotate(${angle}deg) scale(${scale})`;
     const distance = Math.min(
-      between(160, 245),
+      between(132, 300),
       Math.max(32, bank.element.offsetTop - 55),
     );
     const contactY = surface.y - halfFlake * landingScale * 0.88;
     const contact = pose(0, contactY, 100, landingScale);
+    const origin = bank.element.offsetLeft + surface.x;
+    const tilt = between(65, 140) * side;
+    const approach = descentRoutes[route].map(([offset, sway, height]) => {
+      const x = sway * side * amplitude - wind * height * 0.68;
+      const boundedX = Math.max(
+        15 - origin,
+        Math.min(x, layer.clientWidth - 15 - origin),
+      );
+      return {
+        offset,
+        transform: pose(
+          boundedX,
+          contactY - distance * height,
+          100 - tilt * (1 - offset),
+          1 - offset * 0.29,
+        ),
+        opacity: offset === 0 ? 0 : 0.96,
+        easing: "cubic-bezier(.32,.16,.63,.89)",
+      };
+    });
     const flight = bank.flake.animate(
       [
+        ...approach,
         {
-          transform: pose(
-            side * amplitude - wind * 0.58,
-            surface.y - distance,
-            -52,
-          ),
-          opacity: 0,
-        },
-        {
-          transform: pose(
-            -side * amplitude * 0.72 - wind * 0.41,
-            surface.y - distance * 0.67,
-            8,
-          ),
-          opacity: 0.96,
-          offset: 0.26,
-        },
-        {
-          transform: pose(
-            side * amplitude * 0.4 - wind * 0.15,
-            surface.y - distance * 0.21,
-            67,
-            0.9,
-          ),
-          opacity: 0.93,
-          offset: 0.7,
-        },
-        {
-          transform: pose(-side * 3, contactY - 9, 94, 0.67),
+          transform: pose(side * 5, contactY - 6, 100 - tilt * 0.07, 0.61),
           opacity: 0.94,
-          offset: 0.89,
+          offset: 0.93,
         },
         {
           transform: contact,
@@ -152,8 +185,7 @@ export function observeSnowfall(layer: HTMLElement) {
         },
       ],
       {
-        duration: between(1420, 1650) + index * 285,
-        easing: "cubic-bezier(.28,.48,.54,1)",
+        duration: between(1540, 2320) + index * 165,
         fill: "forwards",
       },
     );
