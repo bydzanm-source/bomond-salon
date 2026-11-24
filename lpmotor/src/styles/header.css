@@ -1,5 +1,5 @@
 .header-header {
-  --header-on-accent: #fff;
+  --header-on-accent: var(--color-on-accent);
   width: 100%;
   background: var(--color-canvas);
   border-bottom: 1px solid var(--color-border);
@@ -10,8 +10,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  padding: 18px 24px;
+  gap: clamp(10px, 1.6vw, 24px);
+  padding: 16px 24px;
 }
 .header-logo {
   font-family: "EB Garamond", serif;
@@ -25,14 +25,13 @@
 .header-nav {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: clamp(10px, 1.25vw, 20px);
   flex-wrap: wrap;
 }
 .header-link {
-  letter-spacing: 0.3px;
-  font-family: "EB Garamond", serif;
-  font-weight: 600;
-  font-size: 17px;
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
   color: var(--color-ink);
   text-decoration: none;
   white-space: nowrap;
@@ -255,6 +254,14 @@
 .header-cta:hover {
   transform: translateY(-2px);
 }
+@media (max-width: 1120px) {
+  .header-actions .header-phone {
+    display: none;
+  }
+  .header-theme-label {
+    display: none;
+  }
+}
 @media (max-width: 900px) {
   .header-bar {
     gap: 10px !important;
@@ -337,7 +344,7 @@
 }
 @media (min-width: 0px) {
   html[data-theme="dark"] .header-header {
-    --header-on-accent: #17120f !important;
+    --header-on-accent: var(--color-on-accent) !important;
     color-scheme: dark;
   }
   html[data-theme="dark"] .header-theme {

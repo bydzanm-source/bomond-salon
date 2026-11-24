@@ -2,14 +2,14 @@
 @import "./tokens.css";
 
 html {
-  background: #faf6f1;
-  color: #2b241f;
+  background: var(--color-canvas);
+  color: var(--color-ink);
   scroll-behavior: smooth;
 }
 
 html[data-theme="dark"] {
-  background: #17120f;
-  color: #f2e9e1;
+  background: var(--color-canvas);
+  color: var(--color-ink);
   color-scheme: dark;
 }
 
@@ -19,7 +19,7 @@ body {
 }
 
 .bomond :focus-visible {
-  outline: 2px solid #b8794f;
+  outline: 2px solid var(--color-accent);
   outline-offset: 3px;
 }
 

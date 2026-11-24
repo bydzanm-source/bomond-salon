@@ -282,32 +282,9 @@
   width: 38px;
   background: rgba(184, 121, 79, 0.28);
 }
-.reviews-dot.reviews-is-active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  background: var(--color-accent);
-  transform-origin: left;
-  transform: scaleX(0);
-  animation: reviews-progress 6s linear forwards;
-}
-.reviews-slider.reviews-is-paused .reviews-dot.reviews-is-active::after {
-  animation-play-state: paused;
-}
 .reviews-dot:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 4px;
-}
-@keyframes reviews-progress {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .reviews-track {
@@ -317,10 +294,6 @@
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
-  }
-  .reviews-dot.reviews-is-active::after {
-    animation: none !important;
-    transform: scaleX(1) !important;
   }
   .reviews-aurora {
     display: none !important;

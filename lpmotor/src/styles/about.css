@@ -423,3 +423,10 @@
     color-scheme: dark;
   }
 }
+
+@media (max-width: 520px) {
+  .about-text,
+  .about-media {
+    min-width: 0;
+  }
+}

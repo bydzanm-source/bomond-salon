@@ -66,7 +66,7 @@ export function Prices() {
       <AmbientBackdrop className="prices-aurora" />
       <div className="prices-wrap">
         <p className="prices-eyebrow">Прайс</p>
-        <h2 className="prices-title">Честная цена за безупречный результат</h2>
+        <h2 className="prices-title">Прайс студии</h2>
         <p className="prices-lede">
           Выберите зону процедур — ниже актуальный прайс-лист студии. Точную
           стоимость мастер согласует на консультации в зависимости от длины и
@@ -158,6 +158,11 @@ export function Prices() {
               ))}
             </div>
           ))}
+        </div>
+        <div className="prices-booking">
+          <a href={studio.booking} target="_blank" rel="noopener">
+            Записаться в DIKIDI
+          </a>
         </div>
         <p className="prices-note">
           {

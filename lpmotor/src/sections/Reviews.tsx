@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { reviews } from "../content/reviews";
 import { studio } from "../content/studio";
-import { delay, listen } from "../integrations/sectionRuntime";
+import { listen } from "../integrations/sectionRuntime";
 import { AmbientBackdrop } from "../shared/AmbientBackdrop";
 import "../styles/reviews.css";
 
@@ -9,19 +9,14 @@ export function Reviews() {
   const [page, setPage] = useState(0);
   const [perPage, setPerPage] = useState(3);
   const [enhanced, setEnhanced] = useState(false);
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const [motionPaused, setMotionPaused] = useState(true);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const track = useRef<HTMLDivElement>(null);
   const pageCount = Math.ceil(reviews.length / perPage);
   const activePage = Math.min(page, pageCount - 1);
-  const paused = hovered || focused || motionPaused;
 
   useEffect(() => {
     const narrow = matchMedia("(max-width: 640px)");
     const medium = matchMedia("(max-width: 980px)");
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     const updateLayout = () => {
       const nextPerPage = narrow.matches ? 1 : medium.matches ? 2 : 3;
       setPerPage(nextPerPage);
@@ -29,25 +24,10 @@ export function Reviews() {
         Math.min(current, Math.ceil(reviews.length / nextPerPage) - 1),
       );
     };
-    const updateMotion = () =>
-      setMotionPaused(reduced.matches || document.hidden);
     updateLayout();
-    updateMotion();
     setEnhanced(true);
-    const stopResize = listen(window, "resize", updateLayout);
-    const stopReducedMotion = listen(reduced, "change", updateMotion);
-    const stopVisibility = listen(document, "visibilitychange", updateMotion);
-    return () => {
-      stopResize();
-      stopReducedMotion();
-      stopVisibility();
-    };
+    return listen(window, "resize", updateLayout);
   }, []);
-
-  useEffect(() => {
-    if (paused || pageCount < 2) return;
-    return delay(() => setPage((activePage + 1) % pageCount), 6000);
-  }, [activePage, pageCount, paused]);
 
   useEffect(() => {
     if (track.current) {
@@ -76,17 +56,8 @@ export function Reviews() {
           </span>
         </div>
         <div
-          className={
-            paused ? "reviews-slider reviews-is-paused" : "reviews-slider"
-          }
+          className="reviews-slider"
           data-reviews-ready={enhanced ? "" : undefined}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-          onFocus={() => setFocused(true)}
-          onBlur={(event) => {
-            if (!event.currentTarget.contains(event.relatedTarget))
-              setFocused(false);
-          }}
           onKeyDown={(event) => {
             if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
             event.preventDefault();

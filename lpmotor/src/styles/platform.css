@@ -1,0 +1,22 @@
+body:has([data-bomond-island]),
+body:has([data-bomond-island]) #site_wrapper1 {
+  min-width: 0 !important;
+}
+
+[data-bomond-island] :focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  [data-bomond-island] *,
+  [data-bomond-island] *::before,
+  [data-bomond-island] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

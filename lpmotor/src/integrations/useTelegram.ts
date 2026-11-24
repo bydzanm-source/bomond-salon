@@ -57,7 +57,7 @@ export function useTelegram() {
     }
 
     function syncColors() {
-      const color = root.dataset.theme === "dark" ? "#17120f" : "#faf6f1";
+      const color = root.dataset.theme === "dark" ? "#21191e" : "#f6f1eb";
       for (const method of ["setHeaderColor", "setBackgroundColor"] as const) {
         try {
           webApp?.[method]?.(color);

@@ -35,6 +35,7 @@ export const studio = {
 export const navigation = [
   { id: "about", label: "О салоне" },
   { id: "services", label: "Услуги" },
+  { id: "works", label: "Работы" },
   { id: "masters", label: "Мастера" },
   { id: "promo", label: "Акции" },
   { id: "price", label: "Прайс" },

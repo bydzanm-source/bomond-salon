@@ -44,16 +44,6 @@ export function listen(
   return () => target.removeEventListener(type, listener, capture);
 }
 
-export function delay(callback: () => void, milliseconds: number) {
-  const runtime = sectionRuntime;
-  if (runtime) {
-    const id = runtime.setTimeout(callback, milliseconds);
-    return () => runtime.clearTimeout(id);
-  }
-  const id = window.setTimeout(callback, milliseconds);
-  return () => window.clearTimeout(id);
-}
-
 export function observeIntersections(
   callback: IntersectionObserverCallback,
   options?: IntersectionObserverInit,

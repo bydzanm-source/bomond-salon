@@ -81,9 +81,10 @@ await build({
 const { renderSections } = await import(new URL("mottor-server.js", output));
 const css = (name) =>
   readFile(new URL("src/styles/" + name + ".css", project), "utf8");
-const [tokens, ambientTokens, ambient, booking, fonts, index] =
+const [tokens, platform, ambientTokens, ambient, booking, fonts, index] =
   await Promise.all([
     css("tokens"),
+    css("platform"),
     css("ambient-tokens"),
     css("ambient"),
     css("booking"),
@@ -100,7 +101,7 @@ if (!headScripts)
 
 // LPmotor nests section rules under a block ID, so theme variables belong in the site head.
 const sharedCss = (
-  await transformWithEsbuild(tokens + ambientTokens, "shared.css", {
+  await transformWithEsbuild(tokens + ambientTokens + platform, "shared.css", {
     loader: "css",
     minify: true,
   })
