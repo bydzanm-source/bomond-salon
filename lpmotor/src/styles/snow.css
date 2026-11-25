@@ -17,7 +17,6 @@
   position: absolute;
   aspect-ratio: 1;
   color: #fcfdff;
-  filter: drop-shadow(0 0 1px #405879ad);
 }
 
 .snow-flurry path,
@@ -31,6 +30,7 @@
 
 .snow-flurry {
   top: 0;
+  color: #c0cde0;
   animation: snow-drift linear infinite;
 }
 
@@ -51,7 +51,8 @@
   opacity: 0.88;
 }
 
-[data-snow-weather="calm"] .snow-squall .snow-flurry {
+[data-snow-weather="calm"] .snow-squall .snow-flurry,
+[data-snow-paused] .snow-flurry {
   animation-play-state: paused;
 }
 
@@ -111,13 +112,15 @@
   left: 0;
   top: 0;
   opacity: 0;
+  filter: drop-shadow(0 0 1px #405879ad);
 }
 
 @media (max-width: 550px) {
-  .snow-flurry:nth-child(n + 10) {
+  .snowfall > .snow-flurry:nth-child(3),
+  .snowfall > .snow-flurry:nth-child(6) {
     display: none;
   }
-  .snow-squall .snow-flurry:nth-child(n + 4) {
+  .snow-squall .snow-flurry:nth-child(2) {
     display: none;
   }
 }

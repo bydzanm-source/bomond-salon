@@ -47,7 +47,7 @@
 }
 
 .booking-float.is-visible .booking-ring {
-  animation: booking-pulse 2.6s ease-out infinite;
+  animation: booking-pulse 2.6s ease-out 1;
 }
 .booking-float.is-visible .booking-ring + .booking-ring {
   animation-delay: 1.3s;

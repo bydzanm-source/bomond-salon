@@ -463,25 +463,15 @@ test("snowflakes build caps on text and photos and follow their anchors", async 
   expect(glyphContact.overlap).toBeLessThan(4);
 
   const portrait = page.locator(".hero-photo");
-  const originalTop = (await portrait.boundingBox())!.y;
-  await portrait.evaluate((image) => {
-    const zoom = image
-      .getAnimations()
-      .find(
-        (animation) => animation.effect?.getTiming().iterations === Infinity,
-      )!;
-    zoom.pause();
-    zoom.currentTime = 17600;
-  });
-  const zoomedTop = (await portrait.boundingBox())!.y;
-  expect(originalTop - zoomedTop).toBeGreaterThan(8);
+  await expect(portrait).toHaveCSS("animation-name", "none");
   await expect
     .poll(async () => {
       const snowBase = (await photo
         .locator(".snow-ridge path")
         .first()
         .boundingBox())!;
-      return Math.abs(snowBase.y + snowBase.height - zoomedTop - 2);
+      const photoTop = (await portrait.boundingBox())!.y;
+      return Math.abs(snowBase.y + snowBase.height - photoTop - 2);
     })
     .toBeLessThan(1.5);
 
@@ -572,6 +562,26 @@ test("winter squalls ramp up and return to calm", async ({ page }) => {
   await page.clock.fastForward(6400);
   await expect(layer).toHaveAttribute("data-snow-weather", "calm");
   await expect(layer).toHaveCSS("--snow-wind", "");
+
+  await page.evaluate(() => {
+    Object.defineProperty(document, "hidden", {
+      configurable: true,
+      value: true,
+    });
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  await expect(layer.locator(".snow-flurry").first()).toHaveCSS(
+    "animation-play-state",
+    "paused",
+  );
+  await page.evaluate(() => {
+    Reflect.deleteProperty(document, "hidden");
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  await expect(layer.locator(".snow-flurry").first()).toHaveCSS(
+    "animation-play-state",
+    "running",
+  );
 });
 
 test("the same snow cap receives visibly different approaches", async ({

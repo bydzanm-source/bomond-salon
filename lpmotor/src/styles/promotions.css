@@ -49,11 +49,9 @@
     var(--promotions-gold) 65%,
     var(--promotions-gold) 100%
   );
-  background-size: 220% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: promotions-shine 5.5s ease-in-out 1.2s infinite;
 }
 .promotions-ref-steps {
   list-style: none;
@@ -456,17 +454,6 @@
   transition:
     opacity 0.55s ease-out,
     transform 0.55s ease-out;
-}
-@keyframes promotions-shine {
-  0% {
-    background-position: 110% 0;
-  }
-  45% {
-    background-position: -10% 0;
-  }
-  100% {
-    background-position: -10% 0;
-  }
 }
 .promotions-eyebrow::before {
   content: "";

@@ -9,7 +9,6 @@ type SnowBank = {
   profile: SVGPathElement;
   target?: Element;
   kind?: SeasonalSurface;
-  followsPhoto?: boolean;
   flight?: Animation;
   growth?: Animation;
   cancelNext?: () => void;
@@ -55,8 +54,6 @@ export function observeSnowfall(layer: HTMLElement) {
   let headingBoxes = new WeakMap<Element, ReturnType<typeof headingSupports>>();
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
   let frame = 0;
-  let photoFrame = 0;
-  let lastPhotoFrame = 0;
   let viewportWidth = layer.clientWidth;
   let cancelRescan: (() => void) | undefined;
   let cancelWeather: (() => void) | undefined;
@@ -240,7 +237,6 @@ export function observeSnowfall(layer: HTMLElement) {
     stopFlight(bank);
     bank.target = undefined;
     bank.kind = undefined;
-    bank.followsPhoto = false;
     delete bank.element.dataset.snowSurface;
     delete bank.element.dataset.snowDepth;
   }
@@ -270,27 +266,10 @@ export function observeSnowfall(layer: HTMLElement) {
         continue;
       }
       bank.element.dataset.snowSurface = bank.kind;
-      bank.followsPhoto =
-        bank.kind === "photo" &&
-        getComputedStyle(target).animationName !== "none";
       paintDepth(bank, motion.matches ? 3 : (depths.get(target) ?? 0));
       if (!motion.matches && typeof bank.flake.animate === "function")
         sendFlake(bank, index);
     }
-    if (!photoFrame && banks.some((bank) => bank.followsPhoto))
-      photoFrame = requestAnimationFrame(followPhotos);
-  }
-
-  function followPhotos(now: number) {
-    photoFrame = 0;
-    if (document.hidden || !banks.some((bank) => bank.followsPhoto)) return;
-    if (now - lastPhotoFrame >= 40) {
-      lastPhotoFrame = now;
-      banks.forEach((bank, index) => {
-        if (bank.followsPhoto) position(bank, index);
-      });
-    }
-    photoFrame = requestAnimationFrame(followPhotos);
   }
 
   function update() {
@@ -316,6 +295,7 @@ export function observeSnowfall(layer: HTMLElement) {
   }
 
   function onMotionChange() {
+    layer.toggleAttribute("data-snow-paused", document.hidden);
     reset();
     weather();
   }
@@ -351,15 +331,13 @@ export function observeSnowfall(layer: HTMLElement) {
       update();
     }
   });
-  rescan();
-  weather();
+  onMotionChange();
   return () => {
     motion.removeEventListener("change", onMotionChange);
     cleanups.forEach((cleanup) => cleanup());
     cancelRescan?.();
     cancelWeather?.();
     cancelAnimationFrame(frame);
-    cancelAnimationFrame(photoFrame);
     banks.forEach(release);
   };
 }

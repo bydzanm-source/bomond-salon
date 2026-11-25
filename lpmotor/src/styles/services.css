@@ -143,22 +143,6 @@
 .services-badge {
   overflow: hidden;
 }
-.services-badge::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.55) 50%,
-    transparent 70%
-  );
-  transform: translateX(-120%);
-  animation: services-badge-shine 5s ease-in-out 2.5s infinite;
-}
 .services-more-link {
   position: relative;
   display: inline-block;
@@ -177,15 +161,6 @@
 }
 .services-more-link:hover::after {
   transform: scaleX(1);
-}
-@keyframes services-badge-shine {
-  0% {
-    transform: translateX(-120%);
-  }
-  40%,
-  100% {
-    transform: translateX(120%);
-  }
 }
 .services-card:focus-visible {
   outline: 2px solid var(--color-accent);

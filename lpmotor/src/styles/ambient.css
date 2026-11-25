@@ -13,7 +13,6 @@
     radial-gradient(ellipse at 20% 30%, var(--ambient-violet), transparent 45%),
     radial-gradient(ellipse at 78% 15%, var(--ambient-gold), transparent 44%),
     radial-gradient(ellipse at 68% 82%, var(--ambient-rose), transparent 45%);
-  animation: ambient-drift 18s ease-in-out infinite alternate paused;
 }
 
 [data-ambient-backdrop]::after {
@@ -24,32 +23,9 @@
   background-size:
     151px 154px,
     209px 209px;
-  animation: season-drift 18s linear infinite paused;
-}
-
-[data-ambient-backdrop][data-motion-visible]::before,
-[data-ambient-backdrop][data-motion-visible]::after {
-  animation-play-state: running;
-}
-
-@keyframes ambient-drift {
-  to {
-    transform: translate3d(4%, 3%, 0) scale(1.09);
-  }
-}
-
-@keyframes season-drift {
-  to {
-    background-position:
-      151px 154px,
-      -209px 209px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-ambient-backdrop]::before {
-    animation: none;
-  }
   [data-ambient-backdrop]::after {
     display: none;
   }
